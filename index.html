@@ -2,23 +2,30 @@
 
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="viewport"
+   content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 <title>GazBrowse</title>
 
 <style>
+
 * {
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
+
     background: #080808;
     color: white;
+
     font-family: Arial, sans-serif;
 }
 
@@ -27,58 +34,80 @@ body {
     flex-direction: column;
 }
 
+
 /* =========================
    TOP BAR
 ========================= */
 
 .topbar {
+
     height: 58px;
     min-height: 58px;
 
     display: flex;
     align-items: center;
+
     gap: 8px;
 
     padding: 8px 10px;
 
     background: #111;
+
     border-bottom: 1px solid #292929;
 }
 
+
 .logo {
+
     font-size: 17px;
+
     font-weight: bold;
+
     padding: 0 8px;
+
+    white-space: nowrap;
 }
 
+
 .control {
+
     width: 38px;
     height: 38px;
 
     border: 0;
+
     border-radius: 50%;
 
     background: #242424;
+
     color: white;
 
     font-size: 19px;
+
     cursor: pointer;
 }
 
+
 .control:active {
+
     transform: scale(.94);
 }
 
+
 .address {
+
     flex: 1;
 
     height: 40px;
 
     border: 0;
+
     outline: 0;
+
     border-radius: 22px;
 
     background: #242424;
+
     color: white;
 
     padding: 0 16px;
@@ -86,44 +115,145 @@ body {
     font-size: 14px;
 }
 
+
 /* =========================
-   PAGE
+   DESKTOP TABS
+========================= */
+
+.desktop-tabs {
+
+    height: 40px;
+
+    min-height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 4px 8px;
+
+    background: #0e0e0e;
+
+    overflow-x: auto;
+}
+
+
+.desktop-tab {
+
+    height: 32px;
+
+    min-width: 130px;
+
+    max-width: 220px;
+
+    padding: 0 14px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: #222;
+
+    color: white;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+.desktop-tab.active {
+
+    background: #3a3a3a;
+}
+
+
+.desktop-plus {
+
+    width: 34px;
+
+    height: 32px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: #222;
+
+    color: white;
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   BROWSER AREA
 ========================= */
 
 .browser {
+
     flex: 1;
+
     min-height: 0;
 
     position: relative;
 
     background: white;
+
+    overflow: hidden;
 }
 
+
+/* =========================
+   HOME
+========================= */
+
 .home {
+
     position: absolute;
+
     inset: 0;
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
 
     gap: 20px;
 
     background: #080808;
+
     z-index: 2;
 }
 
+
 .home h1 {
+
     margin: 0;
+
     font-size: clamp(38px, 8vw, 64px);
 }
 
+
 .search {
+
     width: min(650px, 90vw);
+
     height: 56px;
 
     border: 0;
+
     outline: 0;
 
     border-radius: 30px;
@@ -133,33 +263,61 @@ body {
     font-size: 16px;
 }
 
+
 /* =========================
-   IFRAME
+   IFRAME CONTAINER
+========================= */
+
+.frames {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+
+    height: 100%;
+}
+
+
+/* =========================
+   INDIVIDUAL IFRAME
 ========================= */
 
 .browser-frame {
+
+    position: absolute;
+
+    inset: 0;
+
     width: 100%;
+
     height: 100%;
 
     border: 0;
 
-    display: none;
-
     background: white;
+
+    display: none;
 }
 
-.browser-frame.show {
+
+.browser-frame.active {
+
     display: block;
 }
 
+
 /* =========================
-   MOBILE TAB BAR
+   MOBILE BOTTOM BAR
 ========================= */
 
 .bottom {
+
     display: none;
 
     height: 70px;
+
     min-height: 70px;
 
     background: #111;
@@ -173,42 +331,55 @@ body {
     align-items: center;
 }
 
+
 .tabs-button {
+
     flex: 1;
 
     height: 50px;
 
     border: 0;
+
     border-radius: 15px;
 
     background: #242424;
+
     color: white;
 
     font-size: 14px;
 }
 
+
 .new-tab {
+
     width: 52px;
+
     height: 50px;
 
     border: 0;
+
     border-radius: 15px;
 
     background: white;
+
     color: black;
 
     font-size: 25px;
 }
 
+
 /* =========================
-   TAB MENU
+   MOBILE TAB MENU
 ========================= */
 
 .tab-menu {
+
     position: absolute;
 
     left: 8px;
+
     right: 8px;
+
     bottom: 78px;
 
     max-height: 65vh;
@@ -220,6 +391,7 @@ body {
     background: #181818;
 
     border: 1px solid #333;
+
     border-radius: 18px;
 
     z-index: 20;
@@ -227,12 +399,17 @@ body {
     display: none;
 }
 
+
 .tab-menu.open {
+
     display: block;
 }
 
+
 .tab {
+
     display: flex;
+
     align-items: center;
 
     gap: 10px;
@@ -246,97 +423,42 @@ body {
     background: #242424;
 }
 
+
 .tab.active {
+
     background: #383838;
 }
 
+
 .tab-name {
+
     flex: 1;
 
     overflow: hidden;
+
     white-space: nowrap;
+
     text-overflow: ellipsis;
 }
 
+
 .close {
+
     width: 32px;
+
     height: 32px;
 
     border: 0;
+
     border-radius: 50%;
 
     background: #444;
+
     color: white;
 
     font-size: 17px;
 }
 
-/* =========================
-   DESKTOP TABS
-========================= */
-
-.desktop-tabs {
-    height: 40px;
-    min-height: 40px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 5px;
-
-    padding: 4px 8px;
-
-    background: #0e0e0e;
-
-    overflow-x: auto;
-}
-
-.desktop-tab {
-    height: 32px;
-
-    min-width: 130px;
-    max-width: 220px;
-
-    padding: 0 14px;
-
-    border: 0;
-    border-radius: 8px;
-
-    background: #222;
-    color: white;
-
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.desktop-tab.active {
-    background: #3a3a3a;
-}
-
-.desktop-plus {
-    width: 34px;
-    height: 32px;
-
-    border: 0;
-    border-radius: 8px;
-
-    background: #222;
-    color: white;
-
-    font-size: 20px;
-}
-
-/* =========================
-   DESKTOP
-========================= */
-
-@media (min-width: 701px) {
-
-    .bottom {
-        display: none;
-    }
-}
 
 /* =========================
    MOBILE
@@ -345,34 +467,50 @@ body {
 @media (max-width: 700px) {
 
     .logo {
+
         display: none;
     }
+
 
     .desktop-tabs {
+
         display: none;
     }
 
+
     .bottom {
+
         display: flex;
     }
 
+
     .topbar {
+
         height: 55px;
+
         min-height: 55px;
 
         padding: 7px;
     }
 
+
     .control {
+
         width: 35px;
+
         height: 35px;
     }
 
+
     .address {
+
         height: 39px;
+
         font-size: 13px;
     }
+
 }
+
 </style>
 
 </head>
@@ -380,7 +518,7 @@ body {
 <body>
 
 <!-- =========================
-     TOP BROWSER BAR
+     TOP BAR
 ========================= -->
 
 <div class="topbar">
@@ -390,18 +528,39 @@ body {
     GazBrowse
 </div>
 
-<button class="control" onclick="goBack()">‹</button>
 
-<button class="control" onclick="goForward()">›</button>
+<button
+    class="control"
+    onclick="goBack()">
 
-<button class="control" onclick="reloadPage()">↻</button>
+    ‹
+
+</button>
+
+
+<button
+    class="control"
+    onclick="goForward()">
+
+    ›
+
+</button>
+
+
+<button
+    class="control"
+    onclick="reloadCurrent()">
+
+    ↻
+
+</button>
+
 
 <input
     id="address"
     class="address"
     placeholder="Search Google or enter a URL"
-    autocomplete="off"
->
+    autocomplete="off">
 ```
 
 </div>
@@ -426,26 +585,26 @@ body {
     class="home"
     id="home">
 
-    <h1>GazBrowse</h1>
+    <h1>
+        GazBrowse
+    </h1>
+
 
     <input
         id="search"
         class="search"
         placeholder="Search Google..."
-        autocomplete="off"
-    >
+        autocomplete="off">
 
 </div>
 
 
-<!-- GOOGLE / WEBSITE -->
+<!-- EVERY TAB GETS ITS OWN IFRAME -->
 
-<iframe
-    id="frame"
-    class="browser-frame"
-    title="GazBrowse browser"
-    allow="fullscreen"
-></iframe>
+<div
+    class="frames"
+    id="frames">
+</div>
 
 
 <!-- MOBILE TAB MENU -->
@@ -469,13 +628,18 @@ body {
     id="tabsButton"
     class="tabs-button"
     onclick="toggleTabs()">
+
     Tabs 1
+
 </button>
+
 
 <button
     class="new-tab"
     onclick="newTab()">
+
     +
+
 </button>
 ```
 
@@ -483,116 +647,297 @@ body {
 
 <script>
 
-/* =================================
-   TABS
-================================= */
+/* ==================================================
+   TAB DATA
+
+   IMPORTANT:
+   Each tab has its OWN iframe.
+
+   We NEVER reload an iframe when switching tabs.
+================================================== */
 
 let tabs = [
+
     {
         title: "New Tab",
-        url: ""
+
+        url: "",
+
+        iframe: null
     }
+
 ];
+
 
 let activeTab = 0;
 
 
-/* =================================
+/* ==================================================
    ELEMENTS
-================================= */
+================================================== */
 
-const frame =
-    document.getElementById("frame");
+const frames =
+    document.getElementById("frames");
+
 
 const home =
     document.getElementById("home");
 
+
 const search =
     document.getElementById("search");
+
 
 const address =
     document.getElementById("address");
 
+
 const tabMenu =
     document.getElementById("tabMenu");
 
+
 const tabsButton =
     document.getElementById("tabsButton");
+
 
 const desktopTabs =
     document.getElementById("desktopTabs");
 
 
-/* =================================
-   GOOGLE SEARCH
-================================= */
+/* ==================================================
+   CREATE IFRAME FOR A TAB
+================================================== */
+
+function createIframe(index) {
+
+    const iframe =
+        document.createElement("iframe");
+
+
+    iframe.className =
+        "browser-frame";
+
+
+    iframe.setAttribute(
+        "allow",
+        "fullscreen"
+    );
+
+
+    iframe.setAttribute(
+        "title",
+        "GazBrowse Tab " + (index + 1)
+    );
+
+
+    /*
+       Store iframe directly on the tab.
+
+       This is the important part.
+
+       The iframe remains alive even when
+       the user switches to another tab.
+    */
+
+    tabs[index].iframe =
+        iframe;
+
+
+    frames.appendChild(
+        iframe
+    );
+
+
+    return iframe;
+}
+
+
+/* ==================================================
+   SEARCH GOOGLE
+================================================== */
 
 function googleSearch(query) {
 
-    query = query.trim();
+    query =
+        query.trim();
 
-    if (!query) return;
+
+    if (!query) {
+        return;
+    }
+
 
     const url =
-        "https://www.google.com/search?igu=1&q=" +
+        "https://www.google.com/search?igu=1&q="
+        +
         encodeURIComponent(query);
 
-    tabs[activeTab].title = query;
-    tabs[activeTab].url = url;
 
-    address.value = url;
+    tabs[activeTab].title =
+        query;
 
-    home.style.display = "none";
 
-    frame.classList.add("show");
+    tabs[activeTab].url =
+        url;
 
-    frame.src = url;
+
+    /*
+       Create the iframe ONLY ONCE.
+
+       If it already exists,
+       DON'T create another one.
+    */
+
+    let iframe =
+        tabs[activeTab].iframe;
+
+
+    if (!iframe) {
+
+        iframe =
+            createIframe(activeTab);
+
+    }
+
+
+    /*
+       Load Google only when this tab
+       doesn't already have a page.
+    */
+
+    if (!iframe.src) {
+
+        iframe.src = url;
+
+    }
+
+
+    address.value =
+        url;
+
+
+    home.style.display =
+        "none";
+
+
+    showOnlyActiveIframe();
+
 
     renderTabs();
 }
 
 
-/* =================================
+/* ==================================================
+   OPEN URL
+================================================== */
+
+function openWebsite(url) {
+
+    tabs[activeTab].title =
+        url;
+
+
+    tabs[activeTab].url =
+        url;
+
+
+    let iframe =
+        tabs[activeTab].iframe;
+
+
+    if (!iframe) {
+
+        iframe =
+            createIframe(activeTab);
+
+    }
+
+
+    /*
+       DON'T reload the existing page
+       if we're already on it.
+    */
+
+    if (
+        iframe.src !== url
+    ) {
+
+        iframe.src = url;
+
+    }
+
+
+    address.value =
+        url;
+
+
+    home.style.display =
+        "none";
+
+
+    showOnlyActiveIframe();
+
+
+    renderTabs();
+}
+
+
+/* ==================================================
    SEARCH BOX
-================================= */
+================================================== */
 
 search.addEventListener(
     "keydown",
     function(event) {
 
-        if (event.key === "Enter") {
-            googleSearch(search.value);
+        if (
+            event.key === "Enter"
+        ) {
+
+            googleSearch(
+                search.value
+            );
+
         }
 
     }
 );
 
 
-/* =================================
+/* ==================================================
    ADDRESS BAR
-================================= */
+================================================== */
 
 address.addEventListener(
     "keydown",
     function(event) {
 
-        if (event.key !== "Enter") {
+        if (
+            event.key !== "Enter"
+        ) {
+
+            return;
+
+        }
+
+
+        const value =
+            address.value.trim();
+
+
+        if (!value) {
             return;
         }
 
-        let value =
-            address.value.trim();
-
-        if (!value) return;
-
-
-        /*
-           Direct URL
-        */
 
         if (
-            value.startsWith("https://") ||
-            value.startsWith("http://")
+            value.startsWith(
+                "https://"
+            )
+            ||
+            value.startsWith(
+                "http://"
+            )
         ) {
 
             openWebsite(value);
@@ -607,181 +952,297 @@ address.addEventListener(
 );
 
 
-/* =================================
-   OPEN WEBSITE
-================================= */
+/* ==================================================
+   SHOW ONLY ACTIVE IFRAME
+================================================== */
 
-function openWebsite(url) {
+function showOnlyActiveIframe() {
 
-    tabs[activeTab].title = url;
-    tabs[activeTab].url = url;
+    tabs.forEach(
+        function(tab, index) {
 
-    address.value = url;
+            if (!tab.iframe) {
+                return;
+            }
 
-    home.style.display = "none";
 
-    frame.classList.add("show");
+            if (
+                index === activeTab
+            ) {
 
-    frame.src = url;
+                tab.iframe.classList.add(
+                    "active"
+                );
 
-    renderTabs();
+            } else {
+
+                tab.iframe.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
 }
 
 
-/* =================================
+/* ==================================================
    NEW TAB
-================================= */
+================================================== */
 
 function newTab() {
 
+    /*
+       Create a completely new tab.
+
+       The old iframe stays alive.
+    */
+
+    const newIndex =
+        tabs.length;
+
+
     tabs.push({
+
         title: "New Tab",
-        url: ""
+
+        url: "",
+
+        iframe: null
+
     });
 
-    activeTab =
-        tabs.length - 1;
 
-    showCurrentTab();
+    activeTab =
+        newIndex;
+
+
+    address.value =
+        "";
+
+
+    search.value =
+        "";
+
+
+    home.style.display =
+        "flex";
+
+
+    showOnlyActiveIframe();
+
 
     closeTabs();
+
 
     renderTabs();
 }
 
 
-/* =================================
+/* ==================================================
    SWITCH TAB
-================================= */
+================================================== */
 
 function switchTab(index) {
 
-    activeTab = index;
+    activeTab =
+        index;
 
-    showCurrentTab();
-
-    closeTabs();
-
-    renderTabs();
-}
-
-
-/* =================================
-   SHOW CURRENT TAB
-================================= */
-
-function showCurrentTab() {
 
     const tab =
-        tabs[activeTab];
+        tabs[index];
 
 
-    if (!tab.url) {
+    /*
+       IMPORTANT:
 
-        home.style.display = "flex";
+       We DO NOT set iframe.src here.
 
-        frame.classList.remove("show");
+       We simply show the iframe that
+       already exists.
 
-        frame.src = "";
+       Therefore the page stays exactly
+       where it was.
+    */
 
-        address.value = "";
+    if (
+        tab.iframe
+        &&
+        tab.iframe.src
+    ) {
 
-        search.value = "";
-
-        return;
-    }
-
-
-    home.style.display = "none";
-
-    frame.classList.add("show");
-
-    frame.src = tab.url;
-
-    address.value = tab.url;
-}
+        home.style.display =
+            "none";
 
 
-/* =================================
-   CLOSE TAB
-================================= */
+        address.value =
+            tab.url;
 
-function closeTab(index) {
-
-    if (tabs.length === 1) {
-
-        tabs[0] = {
-            title: "New Tab",
-            url: ""
-        };
-
-        activeTab = 0;
 
     } else {
 
-        tabs.splice(index, 1);
+        home.style.display =
+            "flex";
 
-        if (activeTab >= tabs.length) {
-            activeTab = tabs.length - 1;
-        }
+
+        address.value =
+            "";
+
     }
 
-    showCurrentTab();
+
+    showOnlyActiveIframe();
+
+
+    closeTabs();
+
 
     renderTabs();
 }
 
 
-/* =================================
+/* ==================================================
+   CLOSE TAB
+================================================== */
+
+function closeTab(index) {
+
+    const tab =
+        tabs[index];
+
+
+    /*
+       Remove the iframe from the page.
+
+       This only happens when the tab is
+       actually closed.
+    */
+
+    if (tab.iframe) {
+
+        tab.iframe.remove();
+
+    }
+
+
+    tabs.splice(
+        index,
+        1
+    );
+
+
+    if (
+        tabs.length === 0
+    ) {
+
+        tabs.push({
+
+            title: "New Tab",
+
+            url: "",
+
+            iframe: null
+
+        });
+
+    }
+
+
+    if (
+        activeTab >= tabs.length
+    ) {
+
+        activeTab =
+            tabs.length - 1;
+
+    }
+
+
+    switchTab(
+        activeTab
+    );
+}
+
+
+/* ==================================================
    MOBILE TAB MENU
-================================= */
+================================================== */
 
 function toggleTabs() {
 
     renderMobileTabs();
 
-    tabMenu.classList.toggle("open");
+    tabMenu.classList.toggle(
+        "open"
+    );
 }
 
 
 function closeTabs() {
 
-    tabMenu.classList.remove("open");
+    tabMenu.classList.remove(
+        "open"
+    );
 }
 
 
 function renderMobileTabs() {
 
-    tabMenu.innerHTML = "";
+    tabMenu.innerHTML =
+        "";
+
 
     tabs.forEach(
         function(tab, index) {
 
             const row =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            row.className = "tab";
 
-            if (index === activeTab) {
-                row.classList.add("active");
+            row.className =
+                "tab";
+
+
+            if (
+                index === activeTab
+            ) {
+
+                row.classList.add(
+                    "active"
+                );
+
             }
 
 
             const name =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            name.className = "tab-name";
+
+            name.className =
+                "tab-name";
+
 
             name.textContent =
                 tab.title;
 
 
             const close =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
 
-            close.className = "close";
 
-            close.textContent = "×";
+            close.className =
+                "close";
+
+
+            close.textContent =
+                "×";
 
 
             close.onclick =
@@ -790,70 +1251,112 @@ function renderMobileTabs() {
                     event.stopPropagation();
 
                     closeTab(index);
+
                 };
 
 
-            row.appendChild(name);
-            row.appendChild(close);
+            row.appendChild(
+                name
+            );
+
+
+            row.appendChild(
+                close
+            );
 
 
             row.onclick =
                 function() {
+
                     switchTab(index);
+
                 };
 
 
-            tabMenu.appendChild(row);
+            tabMenu.appendChild(
+                row
+            );
 
         }
     );
 }
 
 
-/* =================================
+/* ==================================================
    DESKTOP TABS
-================================= */
+================================================== */
 
 function renderTabs() {
 
-    desktopTabs.innerHTML = "";
+    desktopTabs.innerHTML =
+        "";
+
 
     tabs.forEach(
         function(tab, index) {
 
             const button =
-                document.createElement("button");
+                document.createElement(
+                    "button"
+                );
+
 
             button.className =
                 "desktop-tab";
 
-            if (index === activeTab) {
-                button.classList.add("active");
+
+            if (
+                index === activeTab
+            ) {
+
+                button.classList.add(
+                    "active"
+                );
+
             }
+
 
             button.textContent =
                 tab.title;
 
+
             button.onclick =
                 function() {
+
                     switchTab(index);
+
                 };
 
-            desktopTabs.appendChild(button);
+
+            desktopTabs.appendChild(
+                button
+            );
+
         }
     );
 
 
     const plus =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
-    plus.className = "desktop-plus";
 
-    plus.textContent = "+";
+    plus.className =
+        "desktop-plus";
 
-    plus.onclick = newTab;
 
-    desktopTabs.appendChild(plus);
+    plus.textContent =
+        "+";
+
+
+    plus.onclick =
+        newTab;
+
+
+    desktopTabs.appendChild(
+        plus
+    );
 
 
     tabsButton.textContent =
@@ -861,51 +1364,93 @@ function renderTabs() {
 }
 
 
-/* =================================
+/* ==================================================
    BACK
-================================= */
+================================================== */
 
 function goBack() {
 
-    try {
-        frame.contentWindow.history.back();
-    } catch {
-        window.history.back();
+    const tab =
+        tabs[activeTab];
+
+
+    if (
+        tab.iframe
+    ) {
+
+        try {
+
+            tab.iframe.contentWindow.history.back();
+
+        } catch {
+
+            window.history.back();
+
+        }
+
     }
+
 }
 
 
-/* =================================
+/* ==================================================
    FORWARD
-================================= */
+================================================== */
 
 function goForward() {
 
-    try {
-        frame.contentWindow.history.forward();
-    } catch {
-        window.history.forward();
+    const tab =
+        tabs[activeTab];
+
+
+    if (
+        tab.iframe
+    ) {
+
+        try {
+
+            tab.iframe.contentWindow.history.forward();
+
+        } catch {
+
+            window.history.forward();
+
+        }
+
     }
+
 }
 
 
-/* =================================
+/* ==================================================
    RELOAD
-================================= */
 
-function reloadPage() {
+   Reload is ONLY performed when the user
+   presses the reload button.
 
-    try {
-        frame.contentWindow.location.reload();
-    } catch {
-        frame.src = frame.src;
+   Switching tabs does NOT reload.
+================================================== */
+
+function reloadCurrent() {
+
+    const tab =
+        tabs[activeTab];
+
+
+    if (
+        tab.iframe
+    ) {
+
+        tab.iframe.contentWindow.location.reload();
+
     }
+
 }
 
 
-/* =================================
-   START
-================================= */
+/* ==================================================
+   INITIALISE
+================================================== */
 
 renderTabs();
 
