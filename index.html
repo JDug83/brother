@@ -1,1458 +1,1884 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-   content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#000000">
 <title>GazBrowse</title>
 
 <style>
-
-* {
-    box-sizing: border-box;
+:root{
+  --bg:#000;
+  --panel:#111113;
+  --panel2:#171719;
+  --border:#29292d;
+  --text:#f5f5f7;
+  --muted:#8e8e93;
+  --blue:#0a84ff;
+  --green:#30d158;
 }
 
-html,
-body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-
-    background: #080808;
-    color: white;
-
-    font-family: Arial, sans-serif;
+*{
+  box-sizing:border-box;
 }
 
-body {
-    display: flex;
-    flex-direction: column;
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  background:#000;
+  color:var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    Inter,
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
-
-/* =========================
-   TOP BAR
-========================= */
-
-.topbar {
-
-    height: 58px;
-    min-height: 58px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-
-    padding: 8px 10px;
-
-    background: #111;
-
-    border-bottom: 1px solid #292929;
+body{
+  min-height:100vh;
 }
 
+/* TOP BAR */
 
-.logo {
-
-    font-size: 17px;
-
-    font-weight: bold;
-
-    padding: 0 8px;
-
-    white-space: nowrap;
+.topbar{
+  height:58px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 14px;
+  border-bottom:1px solid #202024;
+  background:rgba(8,8,9,.96);
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter:blur(20px);
 }
 
-
-.control {
-
-    width: 38px;
-    height: 38px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background: #242424;
-
-    color: white;
-
-    font-size: 19px;
-
-    cursor: pointer;
+.logo{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:-.8px;
+  white-space:nowrap;
 }
 
-
-.control:active {
-
-    transform: scale(.94);
+.logo span{
+  color:#777;
+  font-weight:500;
 }
 
-
-.address {
-
-    flex: 1;
-
-    height: 40px;
-
-    border: 0;
-
-    outline: 0;
-
-    border-radius: 22px;
-
-    background: #242424;
-
-    color: white;
-
-    padding: 0 16px;
-
-    font-size: 14px;
+.browser-controls{
+  display:flex;
+  gap:3px;
 }
 
-
-/* =========================
-   DESKTOP TABS
-========================= */
-
-.desktop-tabs {
-
-    height: 40px;
-
-    min-height: 40px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 5px;
-
-    padding: 4px 8px;
-
-    background: #0e0e0e;
-
-    overflow-x: auto;
+.icon-button{
+  width:35px;
+  height:35px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:transparent;
+  color:#aaa;
+  border:0;
+  border-radius:9px;
+  cursor:pointer;
+  font-size:17px;
 }
 
-
-.desktop-tab {
-
-    height: 32px;
-
-    min-width: 130px;
-
-    max-width: 220px;
-
-    padding: 0 14px;
-
-    border: 0;
-
-    border-radius: 8px;
-
-    background: #222;
-
-    color: white;
-
-    cursor: pointer;
-
-    overflow: hidden;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
+.icon-button:hover{
+  background:#1b1b1e;
+  color:#fff;
 }
 
-
-.desktop-tab.active {
-
-    background: #3a3a3a;
+.address{
+  flex:1;
+  height:36px;
+  min-width:100px;
+  background:#171719;
+  border:1px solid #29292d;
+  color:#ddd;
+  border-radius:11px;
+  outline:none;
+  padding:0 13px;
+  font-size:14px;
 }
 
-
-.desktop-plus {
-
-    width: 34px;
-
-    height: 32px;
-
-    border: 0;
-
-    border-radius: 8px;
-
-    background: #222;
-
-    color: white;
-
-    font-size: 20px;
-
-    cursor: pointer;
+.address:focus{
+  border-color:#44444b;
 }
 
+/* TABS */
 
-/* =========================
-   BROWSER AREA
-========================= */
-
-.browser {
-
-    flex: 1;
-
-    min-height: 0;
-
-    position: relative;
-
-    background: white;
-
-    overflow: hidden;
+.tabs{
+  height:42px;
+  display:flex;
+  align-items:flex-end;
+  gap:4px;
+  padding:0 10px;
+  background:#080809;
+  border-bottom:1px solid #202024;
+  overflow-x:auto;
 }
 
-
-/* =========================
-   HOME
-========================= */
-
-.home {
-
-    position: absolute;
-
-    inset: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 20px;
-
-    background: #080808;
-
-    z-index: 2;
+.tab{
+  height:34px;
+  min-width:130px;
+  max-width:210px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 11px;
+  border:1px solid transparent;
+  border-radius:9px 9px 0 0;
+  background:transparent;
+  color:#888;
+  cursor:pointer;
+  font-size:13px;
 }
 
-
-.home h1 {
-
-    margin: 0;
-
-    font-size: clamp(38px, 8vw, 64px);
+.tab.active{
+  background:#151517;
+  color:#eee;
+  border-color:#252529;
+  border-bottom-color:#151517;
 }
 
-
-.search {
-
-    width: min(650px, 90vw);
-
-    height: 56px;
-
-    border: 0;
-
-    outline: 0;
-
-    border-radius: 30px;
-
-    padding: 0 22px;
-
-    font-size: 16px;
+.tab-title{
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  flex:1;
+  text-align:left;
 }
 
-
-/* =========================
-   IFRAME CONTAINER
-========================= */
-
-.frames {
-
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-
-    height: 100%;
+.close-tab{
+  color:#777;
+  font-size:15px;
 }
 
-
-/* =========================
-   INDIVIDUAL IFRAME
-========================= */
-
-.browser-frame {
-
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-
-    height: 100%;
-
-    border: 0;
-
-    background: white;
-
-    display: none;
+.close-tab:hover{
+  color:#fff;
 }
 
-
-.browser-frame.active {
-
-    display: block;
+.new-tab{
+  height:34px;
+  width:38px;
+  border:0;
+  background:transparent;
+  color:#888;
+  font-size:20px;
+  cursor:pointer;
 }
 
+/* MAIN */
 
-/* =========================
-   MOBILE BOTTOM BAR
-========================= */
-
-.bottom {
-
-    display: none;
-
-    height: 70px;
-
-    min-height: 70px;
-
-    background: #111;
-
-    border-top: 1px solid #292929;
-
-    padding: 8px;
-
-    gap: 8px;
-
-    align-items: center;
+.app{
+  min-height:calc(100vh - 100px);
 }
 
-
-.tabs-button {
-
-    flex: 1;
-
-    height: 50px;
-
-    border: 0;
-
-    border-radius: 15px;
-
-    background: #242424;
-
-    color: white;
-
-    font-size: 14px;
+.home{
+  max-width:850px;
+  margin:auto;
+  padding:90px 20px 120px;
 }
 
-
-.new-tab {
-
-    width: 52px;
-
-    height: 50px;
-
-    border: 0;
-
-    border-radius: 15px;
-
-    background: white;
-
-    color: black;
-
-    font-size: 25px;
+.hero{
+  text-align:center;
+  margin-bottom:30px;
 }
 
-
-/* =========================
-   MOBILE TAB MENU
-========================= */
-
-.tab-menu {
-
-    position: absolute;
-
-    left: 8px;
-
-    right: 8px;
-
-    bottom: 78px;
-
-    max-height: 65vh;
-
-    overflow-y: auto;
-
-    padding: 10px;
-
-    background: #181818;
-
-    border: 1px solid #333;
-
-    border-radius: 18px;
-
-    z-index: 20;
-
-    display: none;
+.hero h1{
+  font-size:68px;
+  line-height:1;
+  letter-spacing:-5px;
+  margin:0;
+  font-weight:750;
 }
 
-
-.tab-menu.open {
-
-    display: block;
+.hero .est{
+  margin-top:12px;
+  color:#666;
+  font-size:13px;
 }
 
-
-.tab {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 13px;
-
-    margin-bottom: 8px;
-
-    border-radius: 12px;
-
-    background: #242424;
+.hero p{
+  color:#777;
+  margin-top:18px;
+  font-size:15px;
 }
 
+/* SEARCH */
 
-.tab.active {
-
-    background: #383838;
+.search-box{
+  width:100%;
+  height:58px;
+  display:flex;
+  align-items:center;
+  padding:5px;
+  background:#151517;
+  border:1px solid #303035;
+  border-radius:18px;
+  box-shadow:0 20px 70px rgba(0,0,0,.6);
 }
 
-
-.tab-name {
-
-    flex: 1;
-
-    overflow: hidden;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
+.search-icon{
+  width:48px;
+  text-align:center;
+  color:#777;
+  font-size:19px;
 }
 
-
-.close {
-
-    width: 32px;
-
-    height: 32px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background: #444;
-
-    color: white;
-
-    font-size: 17px;
+.search-input{
+  flex:1;
+  height:100%;
+  background:transparent;
+  border:0;
+  outline:0;
+  color:white;
+  font-size:17px;
+  font-family:inherit;
 }
 
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 700px) {
-
-    .logo {
-
-        display: none;
-    }
-
-
-    .desktop-tabs {
-
-        display: none;
-    }
-
-
-    .bottom {
-
-        display: flex;
-    }
-
-
-    .topbar {
-
-        height: 55px;
-
-        min-height: 55px;
-
-        padding: 7px;
-    }
-
-
-    .control {
-
-        width: 35px;
-
-        height: 35px;
-    }
-
-
-    .address {
-
-        height: 39px;
-
-        font-size: 13px;
-    }
-
+.search-input::placeholder{
+  color:#666;
 }
 
+.search-button{
+  height:46px;
+  padding:0 19px;
+  border:0;
+  border-radius:13px;
+  background:#fff;
+  color:#000;
+  font-weight:650;
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.search-button:hover{
+  background:#ddd;
+}
+
+/* SEARCH FILTERS */
+
+.filters{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  margin:17px 0;
+  flex-wrap:wrap;
+}
+
+.filter{
+  border:1px solid #29292d;
+  background:#09090a;
+  color:#888;
+  border-radius:999px;
+  padding:8px 14px;
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.filter.active{
+  background:#1d1d20;
+  color:#fff;
+}
+
+/* RESULTS */
+
+.results-page{
+  display:none;
+  max-width:1000px;
+  margin:auto;
+  padding:25px 20px 100px;
+}
+
+.results-page.visible{
+  display:block;
+}
+
+.search-small{
+  display:flex;
+  height:48px;
+  margin-bottom:22px;
+}
+
+.search-small input{
+  flex:1;
+  background:#151517;
+  border:1px solid #29292d;
+  border-radius:13px 0 0 13px;
+  color:#fff;
+  outline:0;
+  padding:0 15px;
+  font-size:15px;
+}
+
+.search-small button{
+  width:85px;
+  border:0;
+  background:#fff;
+  color:#000;
+  border-radius:0 13px 13px 0;
+  font-weight:650;
+  cursor:pointer;
+}
+
+.result-count{
+  color:#666;
+  font-size:12px;
+  margin-bottom:15px;
+}
+
+/* AI OVERVIEW */
+
+.ai-overview{
+  border:1px solid #303035;
+  background:
+    linear-gradient(
+      145deg,
+      #171719,
+      #0d0d0f
+    );
+  border-radius:20px;
+  padding:22px;
+  margin-bottom:25px;
+}
+
+.ai-header{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-bottom:12px;
+  font-size:16px;
+  font-weight:700;
+}
+
+.ai-star{
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:9px;
+  background:#fff;
+  color:#000;
+}
+
+.ai-text{
+  color:#ddd;
+  line-height:1.7;
+  font-size:15px;
+}
+
+.ai-sources{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:15px;
+}
+
+.ai-source{
+  padding:6px 9px;
+  border:1px solid #303035;
+  border-radius:8px;
+  color:#888;
+  font-size:11px;
+}
+
+/* RESULTS */
+
+.result{
+  padding:20px 3px;
+  border-bottom:1px solid #202024;
+}
+
+.result-domain{
+  font-size:12px;
+  color:#666;
+  margin-bottom:5px;
+}
+
+.result-title{
+  font-size:20px;
+  margin:0 0 7px;
+  letter-spacing:-.3px;
+}
+
+.result-title a{
+  color:#f5f5f7;
+  text-decoration:none;
+}
+
+.result-title a:hover{
+  text-decoration:underline;
+}
+
+.result-url{
+  font-size:12px;
+  color:#777;
+  margin-bottom:8px;
+  word-break:break-all;
+}
+
+.result-description{
+  color:#999;
+  line-height:1.55;
+  font-size:14px;
+}
+
+/* SIMILAR */
+
+.similar-section{
+  margin-top:38px;
+}
+
+.similar-title{
+  font-size:18px;
+  margin-bottom:13px;
+}
+
+.similar-grid{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+}
+
+.similar-card{
+  display:block;
+  text-decoration:none;
+  color:#ddd;
+  background:#101012;
+  border:1px solid #29292d;
+  border-radius:13px;
+  padding:11px 14px;
+  transition:.15s;
+}
+
+.similar-card:hover{
+  background:#1a1a1d;
+  border-color:#44444a;
+}
+
+/* EMPTY */
+
+.empty{
+  text-align:center;
+  color:#666;
+  padding:65px 20px;
+}
+
+/* SETTINGS */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  backdrop-filter:blur(10px);
+}
+
+.overlay.open{
+  display:flex;
+}
+
+.settings{
+  width:min(500px,100%);
+  background:#151517;
+  border:1px solid #303035;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 30px 100px #000;
+}
+
+.settings h2{
+  margin:0 0 20px;
+}
+
+.setting{
+  border-top:1px solid #28282c;
+  padding:16px 0;
+}
+
+.setting label{
+  display:block;
+  font-size:14px;
+  margin-bottom:7px;
+}
+
+.setting small{
+  color:#777;
+}
+
+.setting input{
+  width:100%;
+  background:#09090a;
+  border:1px solid #303035;
+  color:white;
+  padding:11px;
+  border-radius:10px;
+  outline:none;
+}
+
+.settings-buttons{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:15px;
+}
+
+.settings-buttons button{
+  border:0;
+  border-radius:10px;
+  padding:10px 15px;
+  cursor:pointer;
+}
+
+.close-settings{
+  background:#29292d;
+  color:#fff;
+}
+
+.save-settings{
+  background:#fff;
+  color:#000;
+}
+
+/* MOBILE */
+
+.mobile-bottom{
+  display:none;
+}
+
+@media(max-width:700px){
+
+  .topbar{
+    padding:0 8px;
+  }
+
+  .logo{
+    font-size:17px;
+  }
+
+  .browser-controls{
+    display:none;
+  }
+
+  .address{
+    font-size:12px;
+  }
+
+  .tabs{
+    display:none;
+  }
+
+  .hero h1{
+    font-size:48px;
+    letter-spacing:-3px;
+  }
+
+  .home{
+    padding-top:60px;
+  }
+
+  .search-box{
+    height:53px;
+  }
+
+  .search-button{
+    padding:0 14px;
+  }
+
+  .mobile-bottom{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:62px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    background:rgba(10,10,11,.94);
+    border-top:1px solid #252529;
+    z-index:40;
+    backdrop-filter:blur(20px);
+  }
+
+  .mobile-bottom button{
+    width:44px;
+    height:40px;
+    background:#18181a;
+    border:1px solid #303035;
+    border-radius:11px;
+    color:#aaa;
+    font-size:17px;
+  }
+
+}
 </style>
-
 </head>
 
 <body>
 
-<!-- =========================
-     TOP BAR
-========================= -->
+<header class="topbar">
 
-<div class="topbar">
+  <div class="logo">
+    Gaz<span>Browse</span>
+  </div>
 
-```
-<div class="logo">
-    GazBrowse
-</div>
+  <div class="browser-controls">
 
+    <button class="icon-button" onclick="history.back()">‹</button>
 
-<button
-    class="control"
-    onclick="goBack()">
+    <button class="icon-button" onclick="history.forward()">›</button>
 
-    ‹
+    <button class="icon-button" onclick="location.reload()">↻</button>
 
-</button>
+  </div>
 
-
-<button
-    class="control"
-    onclick="goForward()">
-
-    ›
-
-</button>
-
-
-<button
-    class="control"
-    onclick="reloadCurrent()">
-
-    ↻
-
-</button>
-
-
-<input
-    id="address"
+  <input
     class="address"
-    placeholder="Search Google or enter a URL"
-    autocomplete="off">
-```
+    id="address"
+    placeholder="Search or enter website"
+    autocomplete="off"
+  >
 
-</div>
+  <button
+    class="icon-button"
+    onclick="openSettings()"
+    title="Settings"
+  >
+    ⚙
+  </button>
 
-<!-- =========================
-     DESKTOP TABS
-========================= -->
+</header>
 
-<div
-    class="desktop-tabs"
-    id="desktopTabs">
-</div>
+<div class="tabs" id="tabs"></div>
 
-<!-- =========================
-     BROWSER
-========================= -->
+<div class="app">
 
-<div class="browser">
+<section class="home" id="home">
 
-```
-<div
-    class="home"
-    id="home">
+  <div class="hero">
 
-    <h1>
-        GazBrowse
-    </h1>
+    <h1>GazBrowse</h1>
 
+    <div class="est">
+      est. 2026 · open source
+    </div>
+
+    <p>
+      Search the web your way.
+    </p>
+
+  </div>
+
+  <form class="search-box" id="mainSearch">
+
+    <div class="search-icon">
+      ⌕
+    </div>
 
     <input
-        id="search"
-        class="search"
-        placeholder="Search Google..."
-        autocomplete="off">
+      class="search-input"
+      id="mainInput"
+      placeholder="Search the web..."
+      autocomplete="off"
+    >
+
+    <button class="search-button">
+      Search
+    </button>
+
+  </form>
+
+  <div class="filters">
+
+    <button
+      class="filter active"
+      data-engine="google"
+    >
+      Google
+    </button>
+
+    <button
+      class="filter"
+      data-engine="bing"
+    >
+      Bing
+    </button>
+
+    <button
+      class="filter"
+      data-engine="duck"
+    >
+      DuckDuckGo
+    </button>
+
+  </div>
+
+</section>
+
+
+<section
+  class="results-page"
+  id="resultsPage"
+>
+
+  <form
+    class="search-small"
+    id="resultsSearch"
+  >
+
+    <input
+      id="resultsInput"
+      autocomplete="off"
+    >
+
+    <button>
+      Search
+    </button>
+
+  </form>
+
+  <div
+    class="result-count"
+    id="resultCount"
+  ></div>
+
+  <div id="aiOverview"></div>
+
+  <div id="searchResults"></div>
+
+  <div
+    class="similar-section"
+    id="similarSection"
+  ></div>
+
+</section>
 
 </div>
 
 
-<!-- EVERY TAB GETS ITS OWN IFRAME -->
+<div class="mobile-bottom">
 
-<div
-    class="frames"
-    id="frames">
-</div>
+  <button onclick="showHome()">
+    ⌂
+  </button>
 
-
-<!-- MOBILE TAB MENU -->
-
-<div
-    id="tabMenu"
-    class="tab-menu">
-</div>
-```
-
-</div>
-
-<!-- =========================
-     MOBILE BOTTOM BAR
-========================= -->
-
-<div class="bottom">
-
-```
-<button
-    id="tabsButton"
-    class="tabs-button"
-    onclick="toggleTabs()">
-
-    Tabs 1
-
-</button>
-
-
-<button
-    class="new-tab"
-    onclick="newTab()">
-
+  <button onclick="newTab()">
     +
+  </button>
 
-</button>
-```
+  <button onclick="openSettings()">
+    ⚙
+  </button>
 
 </div>
+
+
+<!-- SETTINGS -->
+
+<div
+  class="overlay"
+  id="settingsOverlay"
+>
+
+  <div class="settings">
+
+    <h2>GazBrowse Settings</h2>
+
+    <div class="setting">
+
+      <label>
+        Search engine
+      </label>
+
+      <select
+        id="engineSetting"
+        style="
+          width:100%;
+          background:#09090a;
+          color:#fff;
+          border:1px solid #303035;
+          padding:11px;
+          border-radius:10px;
+        "
+      >
+
+        <option value="google">
+          Google
+        </option>
+
+        <option value="bing">
+          Bing
+        </option>
+
+        <option value="duck">
+          DuckDuckGo
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="setting">
+
+      <label>
+        Optional AI endpoint
+      </label>
+
+      <input
+        id="aiEndpoint"
+        placeholder="https://example.com/api"
+      >
+
+      <small>
+        Leave empty for the built-in local overview.
+      </small>
+
+    </div>
+
+
+    <div class="setting">
+
+      <label>
+        Search history
+      </label>
+
+      <button
+        onclick="clearHistory()"
+        style="
+          background:#29292d;
+          color:#fff;
+          border:0;
+          padding:10px 13px;
+          border-radius:9px;
+          cursor:pointer;
+        "
+      >
+        Clear history
+      </button>
+
+    </div>
+
+
+    <div class="settings-buttons">
+
+      <button
+        class="close-settings"
+        onclick="closeSettings()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="save-settings"
+        onclick="saveSettings()"
+      >
+        Save
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
 
 <script>
 
-/* ==================================================
-   TAB DATA
+/* ==========================================
+   GAZBROWSE
+   STATIC GITHUB PAGES SEARCH ENGINE
+   ========================================== */
 
-   IMPORTANT:
-   Each tab has its OWN iframe.
 
-   We NEVER reload an iframe when switching tabs.
-================================================== */
+let selectedEngine =
+  localStorage.getItem(
+    "gazbrowse-engine"
+  ) || "google";
+
+
+let searchHistory =
+  JSON.parse(
+    localStorage.getItem(
+      "gazbrowse-history"
+    ) || "[]"
+  );
+
 
 let tabs = [
-
-    {
-        title: "New Tab",
-
-        url: "",
-
-        iframe: null
-    }
-
+  {
+    id:Date.now(),
+    title:"New Tab",
+    query:""
+  }
 ];
 
 
 let activeTab = 0;
 
 
-/* ==================================================
-   ELEMENTS
-================================================== */
+/* ELEMENTS */
 
-const frames =
-    document.getElementById("frames");
+const mainInput =
+  document.getElementById(
+    "mainInput"
+  );
 
-
-const home =
-    document.getElementById("home");
-
-
-const search =
-    document.getElementById("search");
-
+const resultsInput =
+  document.getElementById(
+    "resultsInput"
+  );
 
 const address =
-    document.getElementById("address");
+  document.getElementById(
+    "address"
+  );
+
+const home =
+  document.getElementById(
+    "home"
+  );
+
+const resultsPage =
+  document.getElementById(
+    "resultsPage"
+  );
+
+const aiOverview =
+  document.getElementById(
+    "aiOverview"
+  );
+
+const searchResults =
+  document.getElementById(
+    "searchResults"
+  );
+
+const resultCount =
+  document.getElementById(
+    "resultCount"
+  );
+
+const similarSection =
+  document.getElementById(
+    "similarSection"
+  );
 
 
-const tabMenu =
-    document.getElementById("tabMenu");
+/* TABS */
 
+function renderTabs(){
 
-const tabsButton =
-    document.getElementById("tabsButton");
-
-
-const desktopTabs =
-    document.getElementById("desktopTabs");
-
-
-/* ==================================================
-   CREATE IFRAME FOR A TAB
-================================================== */
-
-function createIframe(index) {
-
-    const iframe =
-        document.createElement("iframe");
-
-
-    iframe.className =
-        "browser-frame";
-
-
-    iframe.setAttribute(
-        "allow",
-        "fullscreen"
+  const container =
+    document.getElementById(
+      "tabs"
     );
 
+  container.innerHTML = "";
 
-    iframe.setAttribute(
-        "title",
-        "GazBrowse Tab " + (index + 1)
-    );
+  tabs.forEach(
+    (tab,index)=>{
 
-
-    /*
-       Store iframe directly on the tab.
-
-       This is the important part.
-
-       The iframe remains alive even when
-       the user switches to another tab.
-    */
-
-    tabs[index].iframe =
-        iframe;
-
-
-    frames.appendChild(
-        iframe
-    );
-
-
-    return iframe;
-}
-
-
-/* ==================================================
-   SEARCH GOOGLE
-================================================== */
-
-function googleSearch(query) {
-
-    query =
-        query.trim();
-
-
-    if (!query) {
-        return;
-    }
-
-
-    const url =
-        "https://www.google.com/search?igu=1&q="
-        +
-        encodeURIComponent(query);
-
-
-    tabs[activeTab].title =
-        query;
-
-
-    tabs[activeTab].url =
-        url;
-
-
-    /*
-       Create the iframe ONLY ONCE.
-
-       If it already exists,
-       DON'T create another one.
-    */
-
-    let iframe =
-        tabs[activeTab].iframe;
-
-
-    if (!iframe) {
-
-        iframe =
-            createIframe(activeTab);
-
-    }
-
-
-    /*
-       Load Google only when this tab
-       doesn't already have a page.
-    */
-
-    if (!iframe.src) {
-
-        iframe.src = url;
-
-    }
-
-
-    address.value =
-        url;
-
-
-    home.style.display =
-        "none";
-
-
-    showOnlyActiveIframe();
-
-
-    renderTabs();
-}
-
-
-/* ==================================================
-   OPEN URL
-================================================== */
-
-function openWebsite(url) {
-
-    tabs[activeTab].title =
-        url;
-
-
-    tabs[activeTab].url =
-        url;
-
-
-    let iframe =
-        tabs[activeTab].iframe;
-
-
-    if (!iframe) {
-
-        iframe =
-            createIframe(activeTab);
-
-    }
-
-
-    /*
-       DON'T reload the existing page
-       if we're already on it.
-    */
-
-    if (
-        iframe.src !== url
-    ) {
-
-        iframe.src = url;
-
-    }
-
-
-    address.value =
-        url;
-
-
-    home.style.display =
-        "none";
-
-
-    showOnlyActiveIframe();
-
-
-    renderTabs();
-}
-
-
-/* ==================================================
-   SEARCH BOX
-================================================== */
-
-search.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Enter"
-        ) {
-
-            googleSearch(
-                search.value
-            );
-
-        }
-
-    }
-);
-
-
-/* ==================================================
-   ADDRESS BAR
-================================================== */
-
-address.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key !== "Enter"
-        ) {
-
-            return;
-
-        }
-
-
-        const value =
-            address.value.trim();
-
-
-        if (!value) {
-            return;
-        }
-
-
-        if (
-            value.startsWith(
-                "https://"
-            )
-            ||
-            value.startsWith(
-                "http://"
-            )
-        ) {
-
-            openWebsite(value);
-
-        } else {
-
-            googleSearch(value);
-
-        }
-
-    }
-);
-
-
-/* ==================================================
-   SHOW ONLY ACTIVE IFRAME
-================================================== */
-
-function showOnlyActiveIframe() {
-
-    tabs.forEach(
-        function(tab, index) {
-
-            if (!tab.iframe) {
-                return;
-            }
-
-
-            if (
-                index === activeTab
-            ) {
-
-                tab.iframe.classList.add(
-                    "active"
-                );
-
-            } else {
-
-                tab.iframe.classList.remove(
-                    "active"
-                );
-
-            }
-
-        }
-    );
-}
-
-
-/* ==================================================
-   NEW TAB
-================================================== */
-
-function newTab() {
-
-    /*
-       Create a completely new tab.
-
-       The old iframe stays alive.
-    */
-
-    const newIndex =
-        tabs.length;
-
-
-    tabs.push({
-
-        title: "New Tab",
-
-        url: "",
-
-        iframe: null
-
-    });
-
-
-    activeTab =
-        newIndex;
-
-
-    address.value =
-        "";
-
-
-    search.value =
-        "";
-
-
-    home.style.display =
-        "flex";
-
-
-    showOnlyActiveIframe();
-
-
-    closeTabs();
-
-
-    renderTabs();
-}
-
-
-/* ==================================================
-   SWITCH TAB
-================================================== */
-
-function switchTab(index) {
-
-    activeTab =
-        index;
-
-
-    const tab =
-        tabs[index];
-
-
-    /*
-       IMPORTANT:
-
-       We DO NOT set iframe.src here.
-
-       We simply show the iframe that
-       already exists.
-
-       Therefore the page stays exactly
-       where it was.
-    */
-
-    if (
-        tab.iframe
-        &&
-        tab.iframe.src
-    ) {
-
-        home.style.display =
-            "none";
-
-
-        address.value =
-            tab.url;
-
-
-    } else {
-
-        home.style.display =
-            "flex";
-
-
-        address.value =
-            "";
-
-    }
-
-
-    showOnlyActiveIframe();
-
-
-    closeTabs();
-
-
-    renderTabs();
-}
-
-
-/* ==================================================
-   CLOSE TAB
-================================================== */
-
-function closeTab(index) {
-
-    const tab =
-        tabs[index];
-
-
-    /*
-       Remove the iframe from the page.
-
-       This only happens when the tab is
-       actually closed.
-    */
-
-    if (tab.iframe) {
-
-        tab.iframe.remove();
-
-    }
-
-
-    tabs.splice(
-        index,
-        1
-    );
-
-
-    if (
-        tabs.length === 0
-    ) {
-
-        tabs.push({
-
-            title: "New Tab",
-
-            url: "",
-
-            iframe: null
-
-        });
-
-    }
-
-
-    if (
-        activeTab >= tabs.length
-    ) {
-
-        activeTab =
-            tabs.length - 1;
-
-    }
-
-
-    switchTab(
-        activeTab
-    );
-}
-
-
-/* ==================================================
-   MOBILE TAB MENU
-================================================== */
-
-function toggleTabs() {
-
-    renderMobileTabs();
-
-    tabMenu.classList.toggle(
-        "open"
-    );
-}
-
-
-function closeTabs() {
-
-    tabMenu.classList.remove(
-        "open"
-    );
-}
-
-
-function renderMobileTabs() {
-
-    tabMenu.innerHTML =
-        "";
-
-
-    tabs.forEach(
-        function(tab, index) {
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "tab";
-
-
-            if (
-                index === activeTab
-            ) {
-
-                row.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            const name =
-                document.createElement(
-                    "div"
-                );
-
-
-            name.className =
-                "tab-name";
-
-
-            name.textContent =
-                tab.title;
-
-
-            const close =
-                document.createElement(
-                    "button"
-                );
-
-
-            close.className =
-                "close";
-
-
-            close.textContent =
-                "×";
-
-
-            close.onclick =
-                function(event) {
-
-                    event.stopPropagation();
-
-                    closeTab(index);
-
-                };
-
-
-            row.appendChild(
-                name
-            );
-
-
-            row.appendChild(
-                close
-            );
-
-
-            row.onclick =
-                function() {
-
-                    switchTab(index);
-
-                };
-
-
-            tabMenu.appendChild(
-                row
-            );
-
-        }
-    );
-}
-
-
-/* ==================================================
-   DESKTOP TABS
-================================================== */
-
-function renderTabs() {
-
-    desktopTabs.innerHTML =
-        "";
-
-
-    tabs.forEach(
-        function(tab, index) {
-
-            const button =
-                document.createElement(
-                    "button"
-                );
-
-
-            button.className =
-                "desktop-tab";
-
-
-            if (
-                index === activeTab
-            ) {
-
-                button.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            button.textContent =
-                tab.title;
-
-
-            button.onclick =
-                function() {
-
-                    switchTab(index);
-
-                };
-
-
-            desktopTabs.appendChild(
-                button
-            );
-
-        }
-    );
-
-
-    const plus =
+      const element =
         document.createElement(
-            "button"
+          "div"
         );
 
+      element.className =
+        "tab " +
+        (
+          index === activeTab
+          ? "active"
+          : ""
+        );
 
-    plus.className =
-        "desktop-plus";
+      element.innerHTML = `
+
+        <span class="tab-title">
+          ${escapeHTML(tab.title)}
+        </span>
+
+        <span
+          class="close-tab"
+          onclick="
+            event.stopPropagation();
+            closeTab(${index});
+          "
+        >
+          ×
+        </span>
+
+      `;
+
+      element.onclick =
+        ()=>switchTab(index);
+
+      container.appendChild(
+        element
+      );
+
+    }
+  );
 
 
-    plus.textContent =
-        "+";
+  const plus =
+    document.createElement(
+      "button"
+    );
+
+  plus.className =
+    "new-tab";
+
+  plus.textContent = "+";
+
+  plus.onclick =
+    newTab;
+
+  container.appendChild(
+    plus
+  );
+
+}
 
 
-    plus.onclick =
-        newTab;
+function newTab(){
+
+  tabs.push({
+    id:Date.now(),
+    title:"New Tab",
+    query:""
+  });
+
+  activeTab =
+    tabs.length - 1;
+
+  renderTabs();
+
+  showHome();
+
+}
 
 
-    desktopTabs.appendChild(
-        plus
+function switchTab(index){
+
+  if(!tabs[index])
+    return;
+
+  activeTab = index;
+
+  renderTabs();
+
+  if(
+    tabs[index].query
+  ){
+
+    mainInput.value =
+      tabs[index].query;
+
+    resultsInput.value =
+      tabs[index].query;
+
+    showResults();
+
+  }else{
+
+    showHome();
+
+  }
+
+}
+
+
+function closeTab(index){
+
+  if(tabs.length === 1){
+
+    tabs[0] = {
+      id:Date.now(),
+      title:"New Tab",
+      query:""
+    };
+
+    activeTab = 0;
+
+  }else{
+
+    tabs.splice(
+      index,
+      1
+    );
+
+    if(
+      activeTab >= tabs.length
+    ){
+
+      activeTab =
+        tabs.length - 1;
+
+    }
+
+  }
+
+  renderTabs();
+
+  switchTab(
+    activeTab
+  );
+
+}
+
+
+/* SEARCH ENGINE */
+
+function performSearch(
+  query
+){
+
+  query =
+    query.trim();
+
+  if(!query)
+    return;
+
+
+  tabs[activeTab].query =
+    query;
+
+  tabs[activeTab].title =
+    query;
+
+
+  addHistory(
+    query
+  );
+
+
+  renderTabs();
+
+
+  mainInput.value =
+    query;
+
+  resultsInput.value =
+    query;
+
+  address.value =
+    query;
+
+
+  showResults();
+
+
+  buildResults(
+    query
+  );
+
+}
+
+
+function buildResults(
+  query
+){
+
+  aiOverview.innerHTML =
+    buildAIOverview(
+      query
     );
 
 
-    tabsButton.textContent =
-        "Tabs " + tabs.length;
+  searchResults.innerHTML =
+    buildExternalResults(
+      query
+    );
+
+
+  similarSection.innerHTML =
+    buildSimilarSites(
+      query
+    );
+
+
+  resultCount.textContent =
+    "Search results for “"
+    +
+    query
+    +
+    "”";
+
 }
 
 
-/* ==================================================
-   BACK
-================================================== */
+/* AI OVERVIEW */
 
-function goBack() {
+function buildAIOverview(
+  query
+){
 
-    const tab =
-        tabs[activeTab];
+  const words =
+    query
+      .split(/\s+/)
+      .filter(Boolean);
 
 
-    if (
-        tab.iframe
-    ) {
+  const answer =
+    `GazBrowse can search public web indexes for “${query}”. ` +
+    `The overview below is a browser-side summary and does not claim facts that have not been retrieved from a source. ` +
+    `For the most current information, open the source results below.`;
 
-        try {
 
-            tab.iframe.contentWindow.history.back();
+  const sources =
+    getSearchLinks(
+      query
+    );
 
-        } catch {
 
-            window.history.back();
+  return `
+
+    <section class="ai-overview">
+
+      <div class="ai-header">
+
+        <div class="ai-star">
+          ✦
+        </div>
+
+        AI Overview
+
+      </div>
+
+      <div class="ai-text">
+
+        ${escapeHTML(answer)}
+
+      </div>
+
+      <div class="ai-sources">
+
+        ${sources
+          .slice(0,3)
+          .map(
+            source=>`
+
+              <div class="ai-source">
+
+                ${escapeHTML(
+                  source.name
+                )}
+
+              </div>
+
+            `
+          )
+          .join("")}
+
+      </div>
+
+    </section>
+
+  `;
+
+}
+
+
+/* RESULTS */
+
+function buildExternalResults(
+  query
+){
+
+  const engines =
+    getSearchLinks(
+      query
+    );
+
+
+  return engines.map(
+    engine=>`
+
+      <article class="result">
+
+        <div class="result-domain">
+          ${escapeHTML(
+            engine.name
+          )}
+        </div>
+
+        <h2 class="result-title">
+
+          <a
+            href="${engine.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+
+            Search ${escapeHTML(
+              query
+            )}
+
+          </a>
+
+        </h2>
+
+        <div class="result-url">
+
+          ${escapeHTML(
+            engine.display
+          )}
+
+        </div>
+
+        <div class="result-description">
+
+          Search this query using
+          ${escapeHTML(
+            engine.name
+          )}.
+
+        </div>
+
+      </article>
+
+    `
+  ).join("");
+
+}
+
+
+/* SEARCH LINKS */
+
+function getSearchLinks(
+  query
+){
+
+  const encoded =
+    encodeURIComponent(
+      query
+    );
+
+
+  return [
+
+    {
+      name:"Google",
+      display:"google.com/search",
+      url:
+        "https://www.google.com/search?q="
+        + encoded
+    },
+
+    {
+      name:"Bing",
+      display:"bing.com/search",
+      url:
+        "https://www.bing.com/search?q="
+        + encoded
+    },
+
+    {
+      name:"DuckDuckGo",
+      display:"duckduckgo.com",
+      url:
+        "https://duckduckgo.com/?q="
+        + encoded
+    }
+
+  ];
+
+}
+
+
+/* SIMILAR WEBSITES */
+
+function buildSimilarSites(
+  query
+){
+
+  const encoded =
+    encodeURIComponent(
+      query
+    );
+
+
+  const sites = [
+
+    [
+      "Google",
+      "https://www.google.com/search?q="
+      + encoded
+    ],
+
+    [
+      "Bing",
+      "https://www.bing.com/search?q="
+      + encoded
+    ],
+
+    [
+      "DuckDuckGo",
+      "https://duckduckgo.com/?q="
+      + encoded
+    ],
+
+    [
+      "Wikipedia",
+      "https://en.wikipedia.org/wiki/Special:Search?search="
+      + encoded
+    ],
+
+    [
+      "Reddit",
+      "https://www.reddit.com/search/?q="
+      + encoded
+    ],
+
+    [
+      "YouTube",
+      "https://www.youtube.com/results?search_query="
+      + encoded
+    ]
+
+  ];
+
+
+  return `
+
+    <section>
+
+      <div class="similar-title">
+        Similar websites
+      </div>
+
+      <div class="similar-grid">
+
+        ${sites.map(
+          site=>`
+
+            <a
+              class="similar-card"
+              href="${site[1]}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+
+              ${escapeHTML(
+                site[0]
+              )}
+
+            </a>
+
+          `
+        ).join("")}
+
+      </div>
+
+    </section>
+
+  `;
+
+}
+
+
+/* FORMS */
+
+document
+  .getElementById(
+    "mainSearch"
+  )
+  .addEventListener(
+    "submit",
+    function(event){
+
+      event.preventDefault();
+
+      performSearch(
+        mainInput.value
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "resultsSearch"
+  )
+  .addEventListener(
+    "submit",
+    function(event){
+
+      event.preventDefault();
+
+      performSearch(
+        resultsInput.value
+      );
+
+    }
+  );
+
+
+address.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key !== "Enter"
+    )
+      return;
+
+
+    const value =
+      address.value.trim();
+
+    if(!value)
+      return;
+
+
+    if(
+      value.startsWith(
+        "http://"
+      )
+      ||
+      value.startsWith(
+        "https://"
+      )
+    ){
+
+      window.open(
+        value,
+        "_blank"
+      );
+
+    }else{
+
+      performSearch(
+        value
+      );
+
+    }
+
+  }
+);
+
+
+/* FILTERS */
+
+document
+  .querySelectorAll(
+    ".filter"
+  )
+  .forEach(
+    button=>{
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          document
+            .querySelectorAll(
+              ".filter"
+            )
+            .forEach(
+              x=>x.classList.remove(
+                "active"
+              )
+            );
+
+          button.classList.add(
+            "active"
+          );
+
+          selectedEngine =
+            button.dataset.engine;
+
+          localStorage.setItem(
+            "gazbrowse-engine",
+            selectedEngine
+          );
 
         }
+      );
 
     }
+  );
+
+
+/* VIEWS */
+
+function showHome(){
+
+  home.style.display =
+    "block";
+
+  resultsPage.classList.remove(
+    "visible"
+  );
 
 }
 
 
-/* ==================================================
-   FORWARD
-================================================== */
+function showResults(){
 
-function goForward() {
+  home.style.display =
+    "none";
 
-    const tab =
-        tabs[activeTab];
-
-
-    if (
-        tab.iframe
-    ) {
-
-        try {
-
-            tab.iframe.contentWindow.history.forward();
-
-        } catch {
-
-            window.history.forward();
-
-        }
-
-    }
+  resultsPage.classList.add(
+    "visible"
+  );
 
 }
 
 
-/* ==================================================
-   RELOAD
+/* HISTORY */
 
-   Reload is ONLY performed when the user
-   presses the reload button.
+function addHistory(
+  query
+){
 
-   Switching tabs does NOT reload.
-================================================== */
+  searchHistory =
+    searchHistory.filter(
+      item=>item !== query
+    );
 
-function reloadCurrent() {
+  searchHistory.unshift(
+    query
+  );
 
-    const tab =
-        tabs[activeTab];
+  searchHistory =
+    searchHistory.slice(
+      0,
+      30
+    );
 
-
-    if (
-        tab.iframe
-    ) {
-
-        tab.iframe.contentWindow.location.reload();
-
-    }
+  localStorage.setItem(
+    "gazbrowse-history",
+    JSON.stringify(
+      searchHistory
+    )
+  );
 
 }
 
 
-/* ==================================================
-   INITIALISE
-================================================== */
+function clearHistory(){
+
+  searchHistory = [];
+
+  localStorage.removeItem(
+    "gazbrowse-history"
+  );
+
+  alert(
+    "GazBrowse history cleared."
+  );
+
+}
+
+
+/* SETTINGS */
+
+function openSettings(){
+
+  document
+    .getElementById(
+      "engineSetting"
+    )
+    .value =
+    selectedEngine;
+
+
+  document
+    .getElementById(
+      "aiEndpoint"
+    )
+    .value =
+    localStorage.getItem(
+      "gazbrowse-ai-endpoint"
+    ) || "";
+
+
+  document
+    .getElementById(
+      "settingsOverlay"
+    )
+    .classList.add(
+      "open"
+    );
+
+}
+
+
+function closeSettings(){
+
+  document
+    .getElementById(
+      "settingsOverlay"
+    )
+    .classList.remove(
+      "open"
+    );
+
+}
+
+
+function saveSettings(){
+
+  selectedEngine =
+    document
+      .getElementById(
+        "engineSetting"
+      )
+      .value;
+
+
+  localStorage.setItem(
+    "gazbrowse-engine",
+    selectedEngine
+  );
+
+
+  const endpoint =
+    document
+      .getElementById(
+        "aiEndpoint"
+      )
+      .value.trim();
+
+
+  localStorage.setItem(
+    "gazbrowse-ai-endpoint",
+    endpoint
+  );
+
+
+  document
+    .querySelectorAll(
+      ".filter"
+    )
+    .forEach(
+      button=>{
+
+        button.classList.toggle(
+          "active",
+          button.dataset.engine
+          ===
+          selectedEngine
+        );
+
+      }
+    );
+
+
+  closeSettings();
+
+}
+
+
+/* SECURITY */
+
+function escapeHTML(
+  value
+){
+
+  return String(
+    value || ""
+  ).replace(
+    /[&<>"']/g,
+    character=>{
+
+      const map = {
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+
+      };
+
+      return map[
+        character
+      ];
+
+    }
+  );
+
+}
+
+
+/* KEYBOARD */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key === "/"
+      &&
+      document.activeElement.tagName
+      !==
+      "INPUT"
+    ){
+
+      event.preventDefault();
+
+      mainInput.focus();
+
+    }
+
+
+    if(
+      event.key === "Escape"
+    ){
+
+      closeSettings();
+
+    }
+
+  }
+);
+
+
+/* CLOSE SETTINGS WHEN CLICKING OUTSIDE */
+
+document
+  .getElementById(
+    "settingsOverlay"
+  )
+  .addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target === this
+      ){
+
+        closeSettings();
+
+      }
+
+    }
+  );
+
+
+/* INITIALIZE */
 
 renderTabs();
+
+showHome();
 
 </script>
 
