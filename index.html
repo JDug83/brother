@@ -1,1496 +1,1118 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
 
-    <title>GazBrowse</title>
+<title>GazBrowse</title>
 
-    <style>
+<style>
 
-        * {
-            box-sizing: border-box;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            min-height: 100%;
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 
-            background: black;
-            color: aliceblue;
+    background: #0b0b0b;
+    color: white;
 
-            font-family: Arial, sans-serif;
-        }
+    font-family: Arial, sans-serif;
+}
 
 
-        /* =================================
-           HEADER
-        ================================= */
+/* =========================
+   APP
+========================= */
 
-        .container {
-            width: 100%;
+.app {
+    width: 100%;
+    height: 100%;
 
-            padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+}
 
-            display: grid;
 
-            grid-template-columns: 1fr auto 1fr;
+/* =========================
+   DESKTOP TOP BAR
+========================= */
 
-            align-items: center;
-        }
+.desktop-bar {
+    height: 58px;
 
+    display: flex;
+    align-items: center;
 
-        .left {
-            justify-self: start;
-        }
+    gap: 10px;
 
+    padding: 8px 12px;
 
-        .center {
-            justify-self: center;
-        }
+    background: #111;
+    border-bottom: 1px solid #292929;
+}
 
 
-        .right {
-            justify-self: end;
-        }
+/* =========================
+   LOGO
+========================= */
 
+.logo {
+    font-weight: bold;
+    font-size: 18px;
 
-        .left p,
-        .right p {
-            margin: 0;
-        }
+    padding: 0 10px;
 
+    white-space: nowrap;
+}
 
-        .center strong {
-            font-size: 18px;
-        }
 
+/* =========================
+   NAV BUTTONS
+========================= */
 
+.nav-button {
+    width: 38px;
+    height: 38px;
 
-        /* =================================
-           MAIN CONTENT
-        ================================= */
+    border: none;
+    border-radius: 50%;
 
-        .main {
-            min-height: calc(100vh - 90px);
+    background: #222;
+    color: white;
 
-            display: flex;
+    font-size: 18px;
 
-            flex-direction: column;
+    cursor: pointer;
+}
 
-            justify-content: center;
+.nav-button:hover {
+    background: #333;
+}
 
-            align-items: center;
 
-            gap: 20px;
+/* =========================
+   ADDRESS BAR
+========================= */
 
-            padding: 20px;
-        }
+.address {
+    flex: 1;
 
+    height: 40px;
 
-        h1 {
-            margin: 0;
+    border-radius: 20px;
 
-            font-size: 48px;
+    border: none;
+    outline: none;
 
-            text-align: center;
-        }
+    background: #222;
+    color: white;
 
+    padding: 0 18px;
 
+    font-size: 15px;
+}
 
-        /* =================================
-           SEARCH BOX
-        ================================= */
+.address::placeholder {
+    color: #888;
+}
 
-        .search-box {
-            width: 500px;
 
-            height: 55px;
+/* =========================
+   CONTENT
+========================= */
 
-            background: white;
+.content {
+    flex: 1;
 
-            border-radius: 999px;
+    position: relative;
 
-            display: flex;
+    overflow: hidden;
+}
 
-            align-items: center;
 
-            padding: 0 25px;
+/* =========================
+   HOME PAGE
+========================= */
 
-            box-shadow:
-                0 4px 25px rgba(255, 255, 255, 0.08);
-        }
+.home {
+    width: 100%;
+    height: 100%;
 
+    display: flex;
 
-        .search-box input {
-            width: 100%;
+    flex-direction: column;
 
-            height: 100%;
+    align-items: center;
+    justify-content: center;
 
-            border: none;
+    gap: 20px;
+}
 
-            outline: none;
+.home h1 {
+    margin: 0;
 
-            background: transparent;
+    font-size: clamp(35px, 7vw, 65px);
+}
 
-            color: #222;
+.search {
+    width: min(650px, 90vw);
 
-            font-size: 16px;
-        }
+    height: 58px;
 
+    border: none;
+    outline: none;
 
-        .search-box input::placeholder {
-            color: #777;
-        }
+    border-radius: 30px;
 
+    padding: 0 25px;
 
+    font-size: 17px;
+}
 
-        /* =================================
-           SEARCH FILTER TABS
-        ================================= */
 
-        .search-tabs {
-            display: flex;
+/* =========================
+   MOBILE BOTTOM BAR
+========================= */
 
-            justify-content: center;
+.mobile-bar {
+    display: none;
 
-            align-items: center;
+    height: 68px;
 
-            gap: 10px;
-        }
+    background: #111;
 
+    border-top: 1px solid #292929;
 
-        .search-tab {
-            border: none;
+    align-items: center;
 
-            background: #222;
+    padding: 8px 10px;
 
-            color: white;
+    gap: 8px;
+}
 
-            padding: 10px 18px;
 
-            border-radius: 999px;
+/* =========================
+   TAB BUTTON
+========================= */
 
-            cursor: pointer;
+.tab-button {
+    flex: 1;
 
-            font-size: 14px;
+    height: 48px;
 
-            transition: 0.2s;
-        }
+    border: none;
 
+    border-radius: 14px;
 
-        .search-tab:hover {
-            background: #333;
-        }
+    background: #222;
+    color: white;
 
+    cursor: pointer;
 
-        .search-tab:active {
-            transform: scale(0.95);
-        }
+    font-size: 14px;
+}
 
+.tab-button.active {
+    background: #444;
+}
 
 
-        /* =================================
-           MOBILE CONTROLS
-           
-           Hidden on desktop/tablet
-        ================================= */
+/* =========================
+   NEW TAB
+========================= */
 
-        .mobile-controls {
-            display: none;
-        }
+.new-tab {
+    width: 50px;
+    height: 48px;
 
+    border: none;
 
+    border-radius: 14px;
 
-        /* =================================
-           TAB OVERVIEW
-           
-           Hidden normally
-        ================================= */
+    background: white;
+    color: black;
 
-        .tab-overview {
-            display: none;
-        }
+    font-size: 25px;
 
+    cursor: pointer;
+}
 
 
-        /* =================================
-           TABLET
-        ================================= */
+/* =========================
+   TAB MENU
+========================= */
 
-        @media (max-width: 800px) {
+.tab-menu {
+    display: none;
 
-            h1 {
-                font-size: 40px;
-            }
+    position: absolute;
 
+    left: 10px;
+    right: 10px;
 
-            .search-box {
-                width: 70vw;
-            }
+    bottom: 78px;
 
-        }
+    max-height: 60vh;
 
+    overflow-y: auto;
 
+    background: #181818;
 
-        /* =================================
-           MOBILE
-        ================================= */
+    border: 1px solid #333;
 
-        @media (max-width: 600px) {
+    border-radius: 18px;
 
-            /* HEADER */
+    padding: 10px;
 
-            .container {
-                padding: 15px;
-            }
+    z-index: 100;
+}
 
+.tab-menu.open {
+    display: block;
+}
 
-            .left p,
-            .right p {
-                font-size: 12px;
-            }
 
+.tab-row {
+    display: flex;
 
-            .center strong {
-                font-size: 16px;
-            }
+    align-items: center;
 
+    gap: 10px;
 
+    padding: 12px;
 
-            /* MAIN */
+    border-radius: 12px;
 
-            .main {
+    background: #222;
 
-                min-height: calc(100vh - 70px);
+    margin-bottom: 8px;
+}
 
-                padding: 20px;
+.tab-row.active {
+    background: #333;
+}
 
-                padding-bottom: 100px;
-            }
+.tab-name {
+    flex: 1;
 
+    overflow: hidden;
 
-            h1 {
-                font-size: 32px;
-            }
+    white-space: nowrap;
 
+    text-overflow: ellipsis;
+}
 
+.close-tab {
+    width: 32px;
+    height: 32px;
 
-            /* SEARCH */
+    border: none;
 
-            .search-box {
+    border-radius: 50%;
 
-                width: 90vw;
+    background: #444;
+    color: white;
 
-                max-width: 500px;
+    cursor: pointer;
+}
 
-                height: 52px;
 
-                padding: 0 20px;
-            }
+/* =========================
+   DESKTOP TABS
+========================= */
 
+.desktop-tabs {
+    height: 42px;
 
-            .search-box input {
-                font-size: 15px;
-            }
+    display: flex;
 
+    align-items: center;
 
+    gap: 5px;
 
-            /* SEARCH TABS */
+    padding: 5px 8px;
 
-            .search-tabs {
-                gap: 6px;
+    background: #0f0f0f;
 
-                flex-wrap: wrap;
-            }
+    overflow-x: auto;
+}
 
+.desktop-tab {
+    min-width: 150px;
+    max-width: 220px;
 
-            .search-tab {
-                padding: 8px 13px;
+    height: 34px;
 
-                font-size: 13px;
-            }
+    padding: 0 10px;
 
+    border: none;
 
+    border-radius: 8px;
 
-            /* =================================
-               MOBILE BOTTOM CONTROLS
-            ================================= */
+    background: #222;
 
-            .mobile-controls {
+    color: white;
 
-                position: fixed;
+    cursor: pointer;
 
-                right: 18px;
+    white-space: nowrap;
 
-                bottom: 18px;
+    overflow: hidden;
 
-                display: flex;
+    text-overflow: ellipsis;
+}
 
-                align-items: center;
+.desktop-tab.active {
+    background: #333;
+}
 
-                gap: 10px;
+.desktop-new-tab {
+    width: 34px;
+    height: 34px;
 
-                z-index: 1000;
-            }
+    border: none;
 
+    border-radius: 8px;
 
-            .tab-button,
-            .new-tab-button {
+    background: #222;
 
-                width: 45px;
+    color: white;
 
-                height: 45px;
+    font-size: 20px;
 
-                border: none;
+    cursor: pointer;
+}
 
-                border-radius: 50%;
 
-                background: rgba(40, 40, 40, 0.96);
+/* =========================
+   MOBILE
+========================= */
 
-                color: white;
+@media (max-width: 700px) {
 
-                cursor: pointer;
+    .desktop-bar {
+        height: 55px;
 
-                box-shadow:
-                    0 4px 15px rgba(0, 0, 0, 0.4);
+        padding: 7px;
+    }
 
-                transition: 0.2s;
-            }
+    .logo {
+        display: none;
+    }
 
+    .nav-button {
+        width: 36px;
+        height: 36px;
+    }
 
-            .tab-button:hover,
-            .new-tab-button:hover {
+    .address {
+        height: 40px;
+        font-size: 14px;
+    }
 
-                background: #444;
-            }
+    .desktop-tabs {
+        display: none;
+    }
 
+    .mobile-bar {
+        display: flex;
+    }
 
-            .tab-button:active,
-            .new-tab-button:active {
+}
 
-                transform: scale(0.92);
-            }
 
+/* =========================
+   DESKTOP
+========================= */
 
-            .tab-button {
+@media (min-width: 701px) {
 
-                font-size: 16px;
+    .desktop-tabs {
+        display: flex;
+    }
 
-                font-weight: bold;
-            }
+}
 
 
-            .new-tab-button {
+/* =========================
+   SMALL PHONES
+========================= */
 
-                font-size: 25px;
+@media (max-width: 400px) {
 
-                font-weight: 300;
-            }
+    .mobile-bar {
+        gap: 5px;
+        padding: 7px;
+    }
 
+    .tab-button {
+        font-size: 12px;
+    }
 
+    .new-tab {
+        width: 46px;
+    }
 
-            /* =================================
-               TAB OVERVIEW
-            ================================= */
+}
 
-            .tab-overview {
-
-                position: fixed;
-
-                inset: 0;
-
-                width: 100%;
-
-                height: 100%;
-
-                background: #111;
-
-                z-index: 2000;
-
-                padding: 25px;
-
-                overflow-y: auto;
-            }
-
-
-            .tab-overview.open {
-
-                display: block;
-            }
-
-
-
-            /* =================================
-               TAB HEADER
-            ================================= */
-
-            .tab-header {
-
-                display: flex;
-
-                justify-content: space-between;
-
-                align-items: center;
-
-                margin-bottom: 25px;
-
-                font-size: 22px;
-
-                font-weight: bold;
-            }
-
-
-            .tab-header button {
-
-                border: none;
-
-                background: #333;
-
-                color: white;
-
-                padding: 8px 15px;
-
-                border-radius: 999px;
-
-                cursor: pointer;
-
-                font-size: 14px;
-            }
-
-
-            .tab-header button:active {
-
-                transform: scale(0.95);
-            }
-
-
-
-            /* =================================
-               TAB GRID
-            ================================= */
-
-            .tab-grid {
-
-                display: grid;
-
-                grid-template-columns: repeat(2, 1fr);
-
-                gap: 15px;
-
-                padding-bottom: 90px;
-            }
-
-
-
-            /* =================================
-               INDIVIDUAL TAB CARD
-            ================================= */
-
-            .overview-tab {
-
-                position: relative;
-
-                height: 180px;
-
-                background: #222;
-
-                border-radius: 18px;
-
-                padding: 15px;
-
-                cursor: pointer;
-
-                border: 2px solid transparent;
-
-                overflow: hidden;
-
-                transition: 0.2s;
-            }
-
-
-            .overview-tab:hover {
-
-                background: #2b2b2b;
-            }
-
-
-            .overview-tab.active {
-
-                border-color: white;
-            }
-
-
-
-            /* =================================
-               TAB PREVIEW
-            ================================= */
-
-            .tab-preview {
-
-                height: 120px;
-
-                width: 100%;
-
-                background: #151515;
-
-                border-radius: 12px;
-
-                display: flex;
-
-                flex-direction: column;
-
-                align-items: center;
-
-                justify-content: center;
-
-                gap: 8px;
-
-                margin-bottom: 10px;
-
-                overflow: hidden;
-            }
-
-
-            .preview-logo {
-
-                font-size: 18px;
-
-                font-weight: bold;
-
-                color: #ddd;
-            }
-
-
-            .preview-search {
-
-                width: 75%;
-
-                height: 12px;
-
-                background: #444;
-
-                border-radius: 999px;
-            }
-
-
-
-            /* =================================
-               TAB TITLE
-            ================================= */
-
-            .overview-tab-title {
-
-                font-size: 13px;
-
-                white-space: nowrap;
-
-                overflow: hidden;
-
-                text-overflow: ellipsis;
-
-                padding-right: 30px;
-            }
-
-
-
-            /* =================================
-               CLOSE TAB
-            ================================= */
-
-            .overview-tab-close {
-
-                position: absolute;
-
-                top: 10px;
-
-                right: 10px;
-
-                width: 28px;
-
-                height: 28px;
-
-                border: none;
-
-                border-radius: 50%;
-
-                background: #444;
-
-                color: white;
-
-                cursor: pointer;
-
-                font-size: 17px;
-
-                z-index: 5;
-            }
-
-
-            .overview-tab-close:hover {
-
-                background: #555;
-            }
-
-
-
-            /* =================================
-               NEW TAB BUTTON
-            ================================= */
-
-            .overview-new-tab {
-
-                position: fixed;
-
-                bottom: 25px;
-
-                left: 50%;
-
-                transform: translateX(-50%);
-
-                border: none;
-
-                background: white;
-
-                color: black;
-
-                padding: 12px 24px;
-
-                border-radius: 999px;
-
-                font-size: 15px;
-
-                cursor: pointer;
-
-                box-shadow:
-                    0 4px 20px rgba(0, 0, 0, 0.4);
-            }
-
-
-            .overview-new-tab:active {
-
-                transform:
-                    translateX(-50%)
-                    scale(0.95);
-            }
-
-        }
-
-
-
-        /* =================================
-           VERY SMALL PHONES
-        ================================= */
-
-        @media (max-width: 400px) {
-
-            .tab-grid {
-
-                grid-template-columns: 1fr;
-            }
-
-
-            .overview-tab {
-
-                height: 170px;
-            }
-
-
-            .search-box {
-
-                width: 94vw;
-            }
-
-
-            h1 {
-
-                font-size: 29px;
-            }
-
-        }
-
-    </style>
-
+</style>
 </head>
-
 
 
 <body>
 
+<div class="app">
 
-    <!-- =================================
-         HEADER
-    ================================= -->
 
-    <div class="container">
+    <!-- =========================
+         DESKTOP / MOBILE TOOLBAR
+    ========================== -->
 
-        <div class="left">
+    <div class="desktop-bar">
 
-            <p>
-                est . 2026
-            </p>
-
+        <div class="logo">
+            GazBrowse
         </div>
 
+        <button
+            class="nav-button"
+            onclick="goBack()">
+            ‹
+        </button>
 
-        <div class="center">
+        <button
+            class="nav-button"
+            onclick="goForward()">
+            ›
+        </button>
 
-            <strong>
-                GazBrowse
-            </strong>
+        <button
+            class="nav-button"
+            onclick="reloadPage()">
+            ↻
+        </button>
 
-        </div>
-
-
-        <div class="right">
-
-            <p>
-                AI search
-            </p>
-
-        </div>
+        <input
+            id="address"
+            class="address"
+            type="text"
+            placeholder="Search Google or enter a URL"
+            autocomplete="off"
+        >
 
     </div>
 
 
+    <!-- =========================
+         DESKTOP TABS
+    ========================== -->
 
-    <!-- =================================
-         MAIN
-    ================================= -->
-
-    <main class="main">
-
-
-        <h1>
-            GazBrowse
-        </h1>
+    <div
+        class="desktop-tabs"
+        id="desktopTabs">
+    </div>
 
 
+    <!-- =========================
+         CONTENT
+    ========================== -->
 
-        <!-- SEARCH -->
+    <div class="content">
 
-        <form
-            class="search-box"
-            id="searchForm"
-        >
+        <div
+            class="home"
+            id="home">
+
+            <h1>
+                GazBrowse
+            </h1>
 
             <input
-                type="text"
-                id="searchInput"
+                id="search"
+                class="search"
                 placeholder="Search Google..."
                 autocomplete="off"
             >
 
-        </form>
-
-
-
-        <!-- =================================
-             SEARCH FILTERS
-        ================================= -->
-
-        <div class="search-tabs">
-
-
-            <button
-                class="search-tab"
-                onclick="setSearch('')"
-            >
-                All
-            </button>
-
-
-            <button
-                class="search-tab"
-                onclick="setSearch('site:youtube.com ')"
-            >
-                YouTube
-            </button>
-
-
-            <button
-                class="search-tab"
-                onclick="setSearch('site:reddit.com ')"
-            >
-                Reddit
-            </button>
-
-
         </div>
 
-    </main>
+
+        <!-- MOBILE TAB MENU -->
+
+        <div
+            class="tab-menu"
+            id="tabMenu">
+        </div>
+
+    </div>
 
 
+    <!-- =========================
+         MOBILE BOTTOM BAR
+    ========================== -->
 
-    <!-- =================================
-         MOBILE CONTROLS
-    ================================= -->
-
-    <div class="mobile-controls">
-
-
-        <!-- TAB COUNT -->
+    <div class="mobile-bar">
 
         <button
             class="tab-button"
-            onclick="openTabOverview()"
-            aria-label="Open tabs"
-        >
+            id="tabButton"
+            onclick="toggleTabs()">
 
-            <span id="tabCount">
-                1
-            </span>
-
+            Tabs
         </button>
 
-
-
-        <!-- NEW TAB -->
-
         <button
-            class="new-tab-button"
-            onclick="newTab()"
-            aria-label="New tab"
-        >
+            class="new-tab"
+            onclick="newTab()">
+
             +
         </button>
 
-
     </div>
 
+</div>
 
 
-    <!-- =================================
-         MOBILE TAB OVERVIEW
-    ================================= -->
+<script>
 
-    <div
-        class="tab-overview"
-        id="tabOverview"
-    >
+/* =================================
+   TAB SYSTEM
+================================= */
 
+let tabs = [
+    {
+        title: "New Tab",
+        url: "",
+        history: [],
+        historyIndex: -1
+    }
+];
 
-        <div class="tab-header">
-
-
-            <span>
-                Tabs
-            </span>
-
-
-            <button
-                onclick="closeTabOverview()"
-            >
-                Done
-            </button>
+let activeTab = 0;
 
 
-        </div>
+/* =================================
+   ELEMENTS
+================================= */
+
+const address =
+    document.getElementById("address");
+
+const search =
+    document.getElementById("search");
+
+const home =
+    document.getElementById("home");
+
+const desktopTabs =
+    document.getElementById("desktopTabs");
+
+const tabMenu =
+    document.getElementById("tabMenu");
+
+const tabButton =
+    document.getElementById("tabButton");
 
 
+/* =================================
+   GOOGLE SEARCH
+================================= */
 
-        <div
-            class="tab-grid"
-            id="tabGrid"
-        ></div>
+function searchGoogle(query) {
 
+    query = query.trim();
 
+    if (!query) {
+        return;
+    }
 
-        <button
-            class="overview-new-tab"
-            onclick="newTab()"
-        >
-            + New Tab
-        </button>
+    tabs[activeTab].title = query;
+    tabs[activeTab].url =
+        "https://www.google.com/search?q=" +
+        encodeURIComponent(query);
 
+    tabs[activeTab].history.push(
+        tabs[activeTab].url
+    );
 
-    </div>
+    tabs[activeTab].historyIndex =
+        tabs[activeTab].history.length - 1;
 
+    address.value =
+        tabs[activeTab].url;
 
+    renderTabs();
 
-    <!-- =================================
-         JAVASCRIPT
-    ================================= -->
+    /*
+       Google does not allow its
+       search page to be displayed
+       inside an iframe.
 
-    <script>
+       Therefore we navigate the
+       current browser tab to Google.
+    */
 
-
-        /* =================================
-           TAB DATA
-        ================================= */
-
-        let tabs = [
-
-            {
-                title: "New Tab",
-
-                search: ""
-            }
-
-        ];
-
-
-        let activeTab = 0;
+    window.location.href =
+        tabs[activeTab].url;
+}
 
 
+/* =================================
+   SEARCH FORM
+================================= */
 
-        /* =================================
-           ELEMENTS
-        ================================= */
+search.addEventListener(
+    "keydown",
+    function(event) {
 
-        const input =
-            document.getElementById(
-                "searchInput"
-            );
+        if (event.key === "Enter") {
 
-
-        const form =
-            document.getElementById(
-                "searchForm"
-            );
-
-
-        const tabGrid =
-            document.getElementById(
-                "tabGrid"
-            );
-
-
-        const tabCount =
-            document.getElementById(
-                "tabCount"
-            );
-
-
-        const tabOverview =
-            document.getElementById(
-                "tabOverview"
-            );
-
-
-
-        /* =================================
-           UPDATE TAB COUNT
-        ================================= */
-
-        function updateTabCount() {
-
-            tabCount.textContent =
-                tabs.length;
-
-        }
-
-
-
-        /* =================================
-           OPEN TAB OVERVIEW
-        ================================= */
-
-        function openTabOverview() {
-
-            renderTabOverview();
-
-            tabOverview.classList.add(
-                "open"
+            searchGoogle(
+                search.value
             );
 
         }
 
+    }
+);
 
 
-        /* =================================
-           CLOSE TAB OVERVIEW
-        ================================= */
+/* =================================
+   ADDRESS BAR
+================================= */
 
-        function closeTabOverview() {
+address.addEventListener(
+    "keydown",
+    function(event) {
 
-            tabOverview.classList.remove(
-                "open"
+        if (event.key !== "Enter") {
+            return;
+        }
+
+        let value =
+            address.value.trim();
+
+        if (!value) {
+            return;
+        }
+
+
+        /*
+           If it looks like a URL,
+           open it directly.
+        */
+
+        if (
+            value.startsWith("http://") ||
+            value.startsWith("https://")
+        ) {
+
+            tabs[activeTab].url =
+                value;
+
+            tabs[activeTab].title =
+                value;
+
+            tabs[activeTab].history.push(
+                value
             );
 
+            tabs[activeTab].historyIndex =
+                tabs[activeTab].history.length - 1;
+
+            renderTabs();
+
+            window.location.href =
+                value;
+
+            return;
         }
 
 
+        /*
+           Otherwise search Google.
+        */
 
-        /* =================================
-           RENDER TAB OVERVIEW
-        ================================= */
+        searchGoogle(value);
 
-        function renderTabOverview() {
+    }
+);
 
-            tabGrid.innerHTML = "";
 
+/* =================================
+   NEW TAB
+================================= */
 
-            tabs.forEach(
-                (tab, index) => {
+function newTab() {
 
+    tabs.push({
+        title: "New Tab",
+        url: "",
+        history: [],
+        historyIndex: -1
+    });
 
-                    /* TAB CARD */
+    activeTab =
+        tabs.length - 1;
 
-                    const tabElement =
-                        document.createElement(
-                            "div"
-                        );
+    address.value = "";
 
+    search.value = "";
 
-                    tabElement.className =
-                        "overview-tab";
+    renderTabs();
 
+    closeTabMenu();
 
-                    if (
-                        index === activeTab
-                    ) {
+}
 
-                        tabElement.classList.add(
-                            "active"
-                        );
 
-                    }
+/* =================================
+   CLOSE TAB
+================================= */
 
+function closeTab(index) {
 
+    if (tabs.length === 1) {
 
-                    /* PREVIEW */
+        tabs[0] = {
+            title: "New Tab",
+            url: "",
+            history: [],
+            historyIndex: -1
+        };
 
-                    const preview =
-                        document.createElement(
-                            "div"
-                        );
+        activeTab = 0;
 
+    } else {
 
-                    preview.className =
-                        "tab-preview";
+        tabs.splice(index, 1);
 
-
-                    const logo =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    logo.className =
-                        "preview-logo";
-
-
-                    logo.textContent =
-                        "GazBrowse";
-
-
-                    const search =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    search.className =
-                        "preview-search";
-
-
-                    preview.appendChild(
-                        logo
-                    );
-
-
-                    preview.appendChild(
-                        search
-                    );
-
-
-
-                    /* TITLE */
-
-                    const title =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    title.className =
-                        "overview-tab-title";
-
-
-                    title.textContent =
-                        tab.title;
-
-
-
-                    /* CLOSE */
-
-                    const close =
-                        document.createElement(
-                            "button"
-                        );
-
-
-                    close.className =
-                        "overview-tab-close";
-
-
-                    close.textContent =
-                        "×";
-
-
-                    close.onclick =
-                        function(event) {
-
-                            event.stopPropagation();
-
-                            closeTab(index);
-
-                        };
-
-
-
-                    /* ADD */
-
-                    tabElement.appendChild(
-                        preview
-                    );
-
-
-                    tabElement.appendChild(
-                        title
-                    );
-
-
-                    tabElement.appendChild(
-                        close
-                    );
-
-
-
-                    /* SWITCH */
-
-                    tabElement.onclick =
-                        function() {
-
-                            switchTab(index);
-
-                        };
-
-
-
-                    tabGrid.appendChild(
-                        tabElement
-                    );
-
-                }
-            );
-
-
-            updateTabCount();
-
-        }
-
-
-
-        /* =================================
-           SWITCH TAB
-        ================================= */
-
-        function switchTab(index) {
-
-            activeTab = index;
-
-
-            input.value =
-                tabs[index].search;
-
-
-            renderTabOverview();
-
-
-            closeTabOverview();
-
-
-            input.focus();
-
-        }
-
-
-
-        /* =================================
-           NEW TAB
-        ================================= */
-
-        function newTab() {
-
-
-            tabs.push({
-
-                title: "New Tab",
-
-                search: ""
-
-            });
-
-
+        if (activeTab >= tabs.length) {
             activeTab =
                 tabs.length - 1;
+        }
+
+    }
+
+    loadTab();
+
+    renderTabs();
+
+}
 
 
-            input.value = "";
+/* =================================
+   SWITCH TAB
+================================= */
+
+function switchTab(index) {
+
+    activeTab = index;
+
+    loadTab();
+
+    closeTabMenu();
+
+    renderTabs();
+
+}
 
 
-            updateTabCount();
+/* =================================
+   LOAD TAB
+================================= */
+
+function loadTab() {
+
+    const tab =
+        tabs[activeTab];
+
+    address.value =
+        tab.url;
+
+    if (!tab.url) {
+
+        home.style.display =
+            "flex";
+
+        search.value = "";
+
+        return;
+    }
+
+    /*
+       The page has already navigated
+       away from GazBrowse if it is
+       Google.
+
+       This function mainly prepares
+       the tab state.
+    */
+
+}
 
 
-            renderTabOverview();
+/* =================================
+   DESKTOP TABS
+================================= */
 
+function renderTabs() {
 
-            /*
-                If we're currently
-                looking at the tab
-                overview, stay there.
-            */
+    desktopTabs.innerHTML = "";
+
+    tabs.forEach(
+        function(tab, index) {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.className =
+                "desktop-tab";
 
             if (
-                tabOverview.classList.contains(
-                    "open"
-                )
+                index === activeTab
             ) {
 
-                return;
+                button.classList.add(
+                    "active"
+                );
+
+            }
+
+            button.textContent =
+                tab.title;
+
+            button.onclick =
+                function() {
+
+                    switchTab(index);
+
+                };
+
+            desktopTabs.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    const plus =
+        document.createElement(
+            "button"
+        );
+
+    plus.className =
+        "desktop-new-tab";
+
+    plus.textContent = "+";
+
+    plus.onclick = newTab;
+
+    desktopTabs.appendChild(
+        plus
+    );
+
+
+    tabButton.textContent =
+        "Tabs " + tabs.length;
+
+}
+
+
+/* =================================
+   MOBILE TAB MENU
+================================= */
+
+function toggleTabs() {
+
+    tabMenu.classList.toggle(
+        "open"
+    );
+
+    renderMobileTabs();
+
+}
+
+
+function closeTabMenu() {
+
+    tabMenu.classList.remove(
+        "open"
+    );
+
+}
+
+
+/* =================================
+   RENDER MOBILE TABS
+================================= */
+
+function renderMobileTabs() {
+
+    tabMenu.innerHTML = "";
+
+    tabs.forEach(
+        function(tab, index) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+            row.className =
+                "tab-row";
+
+            if (
+                index === activeTab
+            ) {
+
+                row.classList.add(
+                    "active"
+                );
 
             }
 
 
-            input.focus();
+            const name =
+                document.createElement(
+                    "div"
+                );
 
-        }
+            name.className =
+                "tab-name";
+
+            name.textContent =
+                tab.title;
 
 
+            const close =
+                document.createElement(
+                    "button"
+                );
 
-        /* =================================
-           CLOSE TAB
-        ================================= */
+            close.className =
+                "close-tab";
 
-        function closeTab(index) {
+            close.textContent = "×";
 
+            close.onclick =
+                function(event) {
 
-            /*
-                Don't allow zero tabs.
-            */
+                    event.stopPropagation();
 
-            if (
-                tabs.length === 1
-            ) {
-
-                tabs[0] = {
-
-                    title: "New Tab",
-
-                    search: ""
+                    closeTab(index);
 
                 };
 
 
-                activeTab = 0;
+            row.appendChild(name);
+            row.appendChild(close);
 
 
-                input.value = "";
+            row.onclick =
+                function() {
+
+                    switchTab(index);
+
+                };
 
 
-                updateTabCount();
-
-
-                renderTabOverview();
-
-
-                return;
-
-            }
-
-
-
-            /* REMOVE TAB */
-
-            tabs.splice(
-                index,
-                1
-            );
-
-
-
-            /* FIX ACTIVE TAB */
-
-            if (
-                activeTab >= tabs.length
-            ) {
-
-                activeTab =
-                    tabs.length - 1;
-
-            }
-
-
-            if (
-                index < activeTab
-            ) {
-
-                activeTab--;
-
-            }
-
-
-
-            /* LOAD ACTIVE TAB */
-
-            input.value =
-                tabs[activeTab].search;
-
-
-            updateTabCount();
-
-
-            renderTabOverview();
+            tabMenu.appendChild(row);
 
         }
+    );
 
+}
 
 
-        /* =================================
-           SEARCH
-        ================================= */
+/* =================================
+   BACK
+================================= */
 
-        form.addEventListener(
-            "submit",
-            function(event) {
+function goBack() {
 
+    if (
+        tabs[activeTab].historyIndex > 0
+    ) {
 
-                event.preventDefault();
+        tabs[activeTab].historyIndex--;
 
+        const url =
+            tabs[activeTab].history[
+                tabs[activeTab].historyIndex
+            ];
 
+        window.location.href =
+            url;
 
-                const query =
-                    input.value.trim();
+    } else {
 
+        window.history.back();
 
+    }
 
-                if (
-                    query === ""
-                ) {
+}
 
-                    return;
 
-                }
+/* =================================
+   FORWARD
+================================= */
 
+function goForward() {
 
+    const tab =
+        tabs[activeTab];
 
-                /* SAVE SEARCH */
+    if (
+        tab.historyIndex <
+        tab.history.length - 1
+    ) {
 
-                tabs[activeTab].search =
-                    query;
+        tab.historyIndex++;
 
+        window.location.href =
+            tab.history[
+                tab.historyIndex
+            ];
 
-                tabs[activeTab].title =
-                    query;
+    } else {
 
+        window.history.forward();
 
+    }
 
-                updateTabCount();
+}
 
 
-                renderTabOverview();
+/* =================================
+   RELOAD
+================================= */
 
+function reloadPage() {
 
+    location.reload();
 
-                /*
-                    Open Google.
-                */
+}
 
-                const googleURL =
-                    "https://www.google.com/search?q="
-                    +
-                    encodeURIComponent(
-                        query
-                    );
 
+/* =================================
+   INITIALISE
+================================= */
 
-                window.location.href =
-                    googleURL;
+renderTabs();
 
-            }
-        );
-
-
-
-        /* =================================
-           SEARCH FILTER
-        ================================= */
-
-        function setSearch(prefix) {
-
-            input.value =
-                prefix;
-
-
-            input.focus();
-
-        }
-
-
-
-        /* =================================
-           KEYBOARD SHORTCUT
-        ================================= */
-
-        document.addEventListener(
-            "keydown",
-            function(event) {
-
-
-                /*
-                    Ctrl/Cmd + T
-                    = New tab
-                */
-
-                if (
-                    (event.ctrlKey ||
-                    event.metaKey)
-                    &&
-                    event.key === "t"
-                ) {
-
-                    event.preventDefault();
-
-                    newTab();
-
-                }
-
-
-
-                /*
-                    Escape
-                    = Close tab overview
-                */
-
-                if (
-                    event.key === "Escape"
-                ) {
-
-                    closeTabOverview();
-
-                }
-
-            }
-        );
-
-
-
-        /* =================================
-           INITIALISE
-        ================================= */
-
-        updateTabCount();
-
-        renderTabOverview();
-
-
-    </script>
+</script>
 
 </body>
-
 </html>
