@@ -1,433 +1,331 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0,
-               maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <title>GazBrowse</title>
 
 <style>
-
 * {
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     margin: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-
-    background: #0b0b0b;
+    background: #080808;
     color: white;
-
     font-family: Arial, sans-serif;
 }
 
-
-/* =========================
-   APP
-========================= */
-
-.app {
-    width: 100%;
-    height: 100%;
-
+body {
     display: flex;
     flex-direction: column;
 }
 
-
 /* =========================
-   DESKTOP TOP BAR
+   TOP BAR
 ========================= */
 
-.desktop-bar {
+.topbar {
     height: 58px;
+    min-height: 58px;
 
     display: flex;
     align-items: center;
+    gap: 8px;
 
-    gap: 10px;
-
-    padding: 8px 12px;
+    padding: 8px 10px;
 
     background: #111;
     border-bottom: 1px solid #292929;
 }
 
-
-/* =========================
-   LOGO
-========================= */
-
 .logo {
+    font-size: 17px;
     font-weight: bold;
-    font-size: 18px;
-
-    padding: 0 10px;
-
-    white-space: nowrap;
+    padding: 0 8px;
 }
 
-
-/* =========================
-   NAV BUTTONS
-========================= */
-
-.nav-button {
+.control {
     width: 38px;
     height: 38px;
 
-    border: none;
+    border: 0;
     border-radius: 50%;
 
-    background: #222;
+    background: #242424;
     color: white;
 
-    font-size: 18px;
-
+    font-size: 19px;
     cursor: pointer;
 }
 
-.nav-button:hover {
-    background: #333;
+.control:active {
+    transform: scale(.94);
 }
-
-
-/* =========================
-   ADDRESS BAR
-========================= */
 
 .address {
     flex: 1;
 
     height: 40px;
 
-    border-radius: 20px;
+    border: 0;
+    outline: 0;
+    border-radius: 22px;
 
-    border: none;
-    outline: none;
-
-    background: #222;
+    background: #242424;
     color: white;
 
-    padding: 0 18px;
+    padding: 0 16px;
 
-    font-size: 15px;
+    font-size: 14px;
 }
-
-.address::placeholder {
-    color: #888;
-}
-
 
 /* =========================
-   CONTENT
+   PAGE
 ========================= */
 
-.content {
+.browser {
     flex: 1;
+    min-height: 0;
 
     position: relative;
 
-    overflow: hidden;
+    background: white;
 }
 
-
-/* =========================
-   HOME PAGE
-========================= */
-
 .home {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
 
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
     justify-content: center;
 
     gap: 20px;
+
+    background: #080808;
+    z-index: 2;
 }
 
 .home h1 {
     margin: 0;
-
-    font-size: clamp(35px, 7vw, 65px);
+    font-size: clamp(38px, 8vw, 64px);
 }
 
 .search {
     width: min(650px, 90vw);
+    height: 56px;
 
-    height: 58px;
-
-    border: none;
-    outline: none;
+    border: 0;
+    outline: 0;
 
     border-radius: 30px;
 
-    padding: 0 25px;
+    padding: 0 22px;
 
-    font-size: 17px;
+    font-size: 16px;
 }
 
-
 /* =========================
-   MOBILE BOTTOM BAR
+   IFRAME
 ========================= */
 
-.mobile-bar {
+.browser-frame {
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+
     display: none;
 
-    height: 68px;
+    background: white;
+}
+
+.browser-frame.show {
+    display: block;
+}
+
+/* =========================
+   MOBILE TAB BAR
+========================= */
+
+.bottom {
+    display: none;
+
+    height: 70px;
+    min-height: 70px;
 
     background: #111;
 
     border-top: 1px solid #292929;
 
-    align-items: center;
-
-    padding: 8px 10px;
+    padding: 8px;
 
     gap: 8px;
+
+    align-items: center;
 }
 
-
-/* =========================
-   TAB BUTTON
-========================= */
-
-.tab-button {
+.tabs-button {
     flex: 1;
 
-    height: 48px;
+    height: 50px;
 
-    border: none;
+    border: 0;
+    border-radius: 15px;
 
-    border-radius: 14px;
-
-    background: #222;
+    background: #242424;
     color: white;
-
-    cursor: pointer;
 
     font-size: 14px;
 }
 
-.tab-button.active {
-    background: #444;
-}
-
-
-/* =========================
-   NEW TAB
-========================= */
-
 .new-tab {
-    width: 50px;
-    height: 48px;
+    width: 52px;
+    height: 50px;
 
-    border: none;
-
-    border-radius: 14px;
+    border: 0;
+    border-radius: 15px;
 
     background: white;
     color: black;
 
     font-size: 25px;
-
-    cursor: pointer;
 }
-
 
 /* =========================
    TAB MENU
 ========================= */
 
 .tab-menu {
-    display: none;
-
     position: absolute;
 
-    left: 10px;
-    right: 10px;
-
+    left: 8px;
+    right: 8px;
     bottom: 78px;
 
-    max-height: 60vh;
+    max-height: 65vh;
 
     overflow-y: auto;
+
+    padding: 10px;
 
     background: #181818;
 
     border: 1px solid #333;
-
     border-radius: 18px;
 
-    padding: 10px;
+    z-index: 20;
 
-    z-index: 100;
+    display: none;
 }
 
 .tab-menu.open {
     display: block;
 }
 
-
-.tab-row {
+.tab {
     display: flex;
-
     align-items: center;
 
     gap: 10px;
 
-    padding: 12px;
+    padding: 13px;
+
+    margin-bottom: 8px;
 
     border-radius: 12px;
 
-    background: #222;
-
-    margin-bottom: 8px;
+    background: #242424;
 }
 
-.tab-row.active {
-    background: #333;
+.tab.active {
+    background: #383838;
 }
 
 .tab-name {
     flex: 1;
 
     overflow: hidden;
-
     white-space: nowrap;
-
     text-overflow: ellipsis;
 }
 
-.close-tab {
+.close {
     width: 32px;
     height: 32px;
 
-    border: none;
-
+    border: 0;
     border-radius: 50%;
 
     background: #444;
     color: white;
 
-    cursor: pointer;
+    font-size: 17px;
 }
-
 
 /* =========================
    DESKTOP TABS
 ========================= */
 
 .desktop-tabs {
-    height: 42px;
+    height: 40px;
+    min-height: 40px;
 
     display: flex;
-
     align-items: center;
 
     gap: 5px;
 
-    padding: 5px 8px;
+    padding: 4px 8px;
 
-    background: #0f0f0f;
+    background: #0e0e0e;
 
     overflow-x: auto;
 }
 
 .desktop-tab {
-    min-width: 150px;
+    height: 32px;
+
+    min-width: 130px;
     max-width: 220px;
 
-    height: 34px;
+    padding: 0 14px;
 
-    padding: 0 10px;
-
-    border: none;
-
+    border: 0;
     border-radius: 8px;
 
     background: #222;
-
     color: white;
 
-    cursor: pointer;
-
-    white-space: nowrap;
-
     overflow: hidden;
-
+    white-space: nowrap;
     text-overflow: ellipsis;
 }
 
 .desktop-tab.active {
-    background: #333;
+    background: #3a3a3a;
 }
 
-.desktop-new-tab {
+.desktop-plus {
     width: 34px;
-    height: 34px;
+    height: 32px;
 
-    border: none;
-
+    border: 0;
     border-radius: 8px;
 
     background: #222;
-
     color: white;
 
     font-size: 20px;
-
-    cursor: pointer;
 }
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 700px) {
-
-    .desktop-bar {
-        height: 55px;
-
-        padding: 7px;
-    }
-
-    .logo {
-        display: none;
-    }
-
-    .nav-button {
-        width: 36px;
-        height: 36px;
-    }
-
-    .address {
-        height: 40px;
-        font-size: 14px;
-    }
-
-    .desktop-tabs {
-        display: none;
-    }
-
-    .mobile-bar {
-        display: flex;
-    }
-
-}
-
 
 /* =========================
    DESKTOP
@@ -435,164 +333,164 @@ body {
 
 @media (min-width: 701px) {
 
+    .bottom {
+        display: none;
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .logo {
+        display: none;
+    }
+
     .desktop-tabs {
+        display: none;
+    }
+
+    .bottom {
         display: flex;
     }
 
-}
+    .topbar {
+        height: 55px;
+        min-height: 55px;
 
-
-/* =========================
-   SMALL PHONES
-========================= */
-
-@media (max-width: 400px) {
-
-    .mobile-bar {
-        gap: 5px;
         padding: 7px;
     }
 
-    .tab-button {
-        font-size: 12px;
+    .control {
+        width: 35px;
+        height: 35px;
     }
 
-    .new-tab {
-        width: 46px;
+    .address {
+        height: 39px;
+        font-size: 13px;
     }
-
 }
-
 </style>
-</head>
 
+</head>
 
 <body>
 
-<div class="app">
+<!-- =========================
+     TOP BROWSER BAR
+========================= -->
 
+<div class="topbar">
 
-    <!-- =========================
-         DESKTOP / MOBILE TOOLBAR
-    ========================== -->
+```
+<div class="logo">
+    GazBrowse
+</div>
 
-    <div class="desktop-bar">
+<button class="control" onclick="goBack()">‹</button>
 
-        <div class="logo">
-            GazBrowse
-        </div>
+<button class="control" onclick="goForward()">›</button>
 
-        <button
-            class="nav-button"
-            onclick="goBack()">
-            ‹
-        </button>
+<button class="control" onclick="reloadPage()">↻</button>
 
-        <button
-            class="nav-button"
-            onclick="goForward()">
-            ›
-        </button>
+<input
+    id="address"
+    class="address"
+    placeholder="Search Google or enter a URL"
+    autocomplete="off"
+>
+```
 
-        <button
-            class="nav-button"
-            onclick="reloadPage()">
-            ↻
-        </button>
+</div>
 
-        <input
-            id="address"
-            class="address"
-            type="text"
-            placeholder="Search Google or enter a URL"
-            autocomplete="off"
-        >
+<!-- =========================
+     DESKTOP TABS
+========================= -->
 
-    </div>
+<div
+    class="desktop-tabs"
+    id="desktopTabs">
+</div>
 
+<!-- =========================
+     BROWSER
+========================= -->
 
-    <!-- =========================
-         DESKTOP TABS
-    ========================== -->
+<div class="browser">
 
-    <div
-        class="desktop-tabs"
-        id="desktopTabs">
-    </div>
+```
+<div
+    class="home"
+    id="home">
 
+    <h1>GazBrowse</h1>
 
-    <!-- =========================
-         CONTENT
-    ========================== -->
-
-    <div class="content">
-
-        <div
-            class="home"
-            id="home">
-
-            <h1>
-                GazBrowse
-            </h1>
-
-            <input
-                id="search"
-                class="search"
-                placeholder="Search Google..."
-                autocomplete="off"
-            >
-
-        </div>
-
-
-        <!-- MOBILE TAB MENU -->
-
-        <div
-            class="tab-menu"
-            id="tabMenu">
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         MOBILE BOTTOM BAR
-    ========================== -->
-
-    <div class="mobile-bar">
-
-        <button
-            class="tab-button"
-            id="tabButton"
-            onclick="toggleTabs()">
-
-            Tabs
-        </button>
-
-        <button
-            class="new-tab"
-            onclick="newTab()">
-
-            +
-        </button>
-
-    </div>
+    <input
+        id="search"
+        class="search"
+        placeholder="Search Google..."
+        autocomplete="off"
+    >
 
 </div>
 
 
+<!-- GOOGLE / WEBSITE -->
+
+<iframe
+    id="frame"
+    class="browser-frame"
+    title="GazBrowse browser"
+    allow="fullscreen"
+></iframe>
+
+
+<!-- MOBILE TAB MENU -->
+
+<div
+    id="tabMenu"
+    class="tab-menu">
+</div>
+```
+
+</div>
+
+<!-- =========================
+     MOBILE BOTTOM BAR
+========================= -->
+
+<div class="bottom">
+
+```
+<button
+    id="tabsButton"
+    class="tabs-button"
+    onclick="toggleTabs()">
+    Tabs 1
+</button>
+
+<button
+    class="new-tab"
+    onclick="newTab()">
+    +
+</button>
+```
+
+</div>
+
 <script>
 
 /* =================================
-   TAB SYSTEM
+   TABS
 ================================= */
 
 let tabs = [
     {
         title: "New Tab",
-        url: "",
-        history: [],
-        historyIndex: -1
+        url: ""
     }
 ];
 
@@ -603,70 +501,59 @@ let activeTab = 0;
    ELEMENTS
 ================================= */
 
-const address =
-    document.getElementById("address");
-
-const search =
-    document.getElementById("search");
+const frame =
+    document.getElementById("frame");
 
 const home =
     document.getElementById("home");
 
-const desktopTabs =
-    document.getElementById("desktopTabs");
+const search =
+    document.getElementById("search");
+
+const address =
+    document.getElementById("address");
 
 const tabMenu =
     document.getElementById("tabMenu");
 
-const tabButton =
-    document.getElementById("tabButton");
+const tabsButton =
+    document.getElementById("tabsButton");
+
+const desktopTabs =
+    document.getElementById("desktopTabs");
 
 
 /* =================================
    GOOGLE SEARCH
 ================================= */
 
-function searchGoogle(query) {
+function googleSearch(query) {
 
     query = query.trim();
 
-    if (!query) {
-        return;
-    }
+    if (!query) return;
 
-    tabs[activeTab].title = query;
-    tabs[activeTab].url =
-        "https://www.google.com/search?q=" +
+    const url =
+        "https://www.google.com/search?igu=1&q=" +
         encodeURIComponent(query);
 
-    tabs[activeTab].history.push(
-        tabs[activeTab].url
-    );
+    tabs[activeTab].title = query;
+    tabs[activeTab].url = url;
 
-    tabs[activeTab].historyIndex =
-        tabs[activeTab].history.length - 1;
+    address.value = url;
 
-    address.value =
-        tabs[activeTab].url;
+    home.style.display = "none";
+
+    frame.classList.add("show");
+
+    frame.src = url;
 
     renderTabs();
-
-    /*
-       Google does not allow its
-       search page to be displayed
-       inside an iframe.
-
-       Therefore we navigate the
-       current browser tab to Google.
-    */
-
-    window.location.href =
-        tabs[activeTab].url;
 }
 
 
 /* =================================
-   SEARCH FORM
+   SEARCH BOX
 ================================= */
 
 search.addEventListener(
@@ -674,11 +561,7 @@ search.addEventListener(
     function(event) {
 
         if (event.key === "Enter") {
-
-            searchGoogle(
-                search.value
-            );
-
+            googleSearch(search.value);
         }
 
     }
@@ -700,51 +583,49 @@ address.addEventListener(
         let value =
             address.value.trim();
 
-        if (!value) {
-            return;
-        }
+        if (!value) return;
 
 
         /*
-           If it looks like a URL,
-           open it directly.
+           Direct URL
         */
 
         if (
-            value.startsWith("http://") ||
-            value.startsWith("https://")
+            value.startsWith("https://") ||
+            value.startsWith("http://")
         ) {
 
-            tabs[activeTab].url =
-                value;
+            openWebsite(value);
 
-            tabs[activeTab].title =
-                value;
+        } else {
 
-            tabs[activeTab].history.push(
-                value
-            );
+            googleSearch(value);
 
-            tabs[activeTab].historyIndex =
-                tabs[activeTab].history.length - 1;
-
-            renderTabs();
-
-            window.location.href =
-                value;
-
-            return;
         }
-
-
-        /*
-           Otherwise search Google.
-        */
-
-        searchGoogle(value);
 
     }
 );
+
+
+/* =================================
+   OPEN WEBSITE
+================================= */
+
+function openWebsite(url) {
+
+    tabs[activeTab].title = url;
+    tabs[activeTab].url = url;
+
+    address.value = url;
+
+    home.style.display = "none";
+
+    frame.classList.add("show");
+
+    frame.src = url;
+
+    renderTabs();
+}
 
 
 /* =================================
@@ -755,22 +636,69 @@ function newTab() {
 
     tabs.push({
         title: "New Tab",
-        url: "",
-        history: [],
-        historyIndex: -1
+        url: ""
     });
 
     activeTab =
         tabs.length - 1;
 
-    address.value = "";
+    showCurrentTab();
 
-    search.value = "";
+    closeTabs();
 
     renderTabs();
+}
 
-    closeTabMenu();
 
+/* =================================
+   SWITCH TAB
+================================= */
+
+function switchTab(index) {
+
+    activeTab = index;
+
+    showCurrentTab();
+
+    closeTabs();
+
+    renderTabs();
+}
+
+
+/* =================================
+   SHOW CURRENT TAB
+================================= */
+
+function showCurrentTab() {
+
+    const tab =
+        tabs[activeTab];
+
+
+    if (!tab.url) {
+
+        home.style.display = "flex";
+
+        frame.classList.remove("show");
+
+        frame.src = "";
+
+        address.value = "";
+
+        search.value = "";
+
+        return;
+    }
+
+
+    home.style.display = "none";
+
+    frame.classList.add("show");
+
+    frame.src = tab.url;
+
+    address.value = tab.url;
 }
 
 
@@ -784,9 +712,7 @@ function closeTab(index) {
 
         tabs[0] = {
             title: "New Tab",
-            url: "",
-            history: [],
-            historyIndex: -1
+            url: ""
         };
 
         activeTab = 0;
@@ -796,67 +722,91 @@ function closeTab(index) {
         tabs.splice(index, 1);
 
         if (activeTab >= tabs.length) {
-            activeTab =
-                tabs.length - 1;
+            activeTab = tabs.length - 1;
         }
-
     }
 
-    loadTab();
+    showCurrentTab();
 
     renderTabs();
-
 }
 
 
 /* =================================
-   SWITCH TAB
+   MOBILE TAB MENU
 ================================= */
 
-function switchTab(index) {
+function toggleTabs() {
 
-    activeTab = index;
+    renderMobileTabs();
 
-    loadTab();
-
-    closeTabMenu();
-
-    renderTabs();
-
+    tabMenu.classList.toggle("open");
 }
 
 
-/* =================================
-   LOAD TAB
-================================= */
+function closeTabs() {
 
-function loadTab() {
+    tabMenu.classList.remove("open");
+}
 
-    const tab =
-        tabs[activeTab];
 
-    address.value =
-        tab.url;
+function renderMobileTabs() {
 
-    if (!tab.url) {
+    tabMenu.innerHTML = "";
 
-        home.style.display =
-            "flex";
+    tabs.forEach(
+        function(tab, index) {
 
-        search.value = "";
+            const row =
+                document.createElement("div");
 
-        return;
-    }
+            row.className = "tab";
 
-    /*
-       The page has already navigated
-       away from GazBrowse if it is
-       Google.
+            if (index === activeTab) {
+                row.classList.add("active");
+            }
 
-       This function mainly prepares
-       the tab state.
-    */
 
+            const name =
+                document.createElement("div");
+
+            name.className = "tab-name";
+
+            name.textContent =
+                tab.title;
+
+
+            const close =
+                document.createElement("button");
+
+            close.className = "close";
+
+            close.textContent = "×";
+
+
+            close.onclick =
+                function(event) {
+
+                    event.stopPropagation();
+
+                    closeTab(index);
+                };
+
+
+            row.appendChild(name);
+            row.appendChild(close);
+
+
+            row.onclick =
+                function() {
+                    switchTab(index);
+                };
+
+
+            tabMenu.appendChild(row);
+
+        }
+    );
 }
 
 
@@ -872,21 +822,13 @@ function renderTabs() {
         function(tab, index) {
 
             const button =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("button");
 
             button.className =
                 "desktop-tab";
 
-            if (
-                index === activeTab
-            ) {
-
-                button.classList.add(
-                    "active"
-                );
-
+            if (index === activeTab) {
+                button.classList.add("active");
             }
 
             button.textContent =
@@ -894,145 +836,28 @@ function renderTabs() {
 
             button.onclick =
                 function() {
-
                     switchTab(index);
-
                 };
 
-            desktopTabs.appendChild(
-                button
-            );
-
+            desktopTabs.appendChild(button);
         }
     );
 
 
     const plus =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
-    plus.className =
-        "desktop-new-tab";
+    plus.className = "desktop-plus";
 
     plus.textContent = "+";
 
     plus.onclick = newTab;
 
-    desktopTabs.appendChild(
-        plus
-    );
+    desktopTabs.appendChild(plus);
 
 
-    tabButton.textContent =
+    tabsButton.textContent =
         "Tabs " + tabs.length;
-
-}
-
-
-/* =================================
-   MOBILE TAB MENU
-================================= */
-
-function toggleTabs() {
-
-    tabMenu.classList.toggle(
-        "open"
-    );
-
-    renderMobileTabs();
-
-}
-
-
-function closeTabMenu() {
-
-    tabMenu.classList.remove(
-        "open"
-    );
-
-}
-
-
-/* =================================
-   RENDER MOBILE TABS
-================================= */
-
-function renderMobileTabs() {
-
-    tabMenu.innerHTML = "";
-
-    tabs.forEach(
-        function(tab, index) {
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-            row.className =
-                "tab-row";
-
-            if (
-                index === activeTab
-            ) {
-
-                row.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            const name =
-                document.createElement(
-                    "div"
-                );
-
-            name.className =
-                "tab-name";
-
-            name.textContent =
-                tab.title;
-
-
-            const close =
-                document.createElement(
-                    "button"
-                );
-
-            close.className =
-                "close-tab";
-
-            close.textContent = "×";
-
-            close.onclick =
-                function(event) {
-
-                    event.stopPropagation();
-
-                    closeTab(index);
-
-                };
-
-
-            row.appendChild(name);
-            row.appendChild(close);
-
-
-            row.onclick =
-                function() {
-
-                    switchTab(index);
-
-                };
-
-
-            tabMenu.appendChild(row);
-
-        }
-    );
-
 }
 
 
@@ -1042,26 +867,11 @@ function renderMobileTabs() {
 
 function goBack() {
 
-    if (
-        tabs[activeTab].historyIndex > 0
-    ) {
-
-        tabs[activeTab].historyIndex--;
-
-        const url =
-            tabs[activeTab].history[
-                tabs[activeTab].historyIndex
-            ];
-
-        window.location.href =
-            url;
-
-    } else {
-
+    try {
+        frame.contentWindow.history.back();
+    } catch {
         window.history.back();
-
     }
-
 }
 
 
@@ -1071,27 +881,11 @@ function goBack() {
 
 function goForward() {
 
-    const tab =
-        tabs[activeTab];
-
-    if (
-        tab.historyIndex <
-        tab.history.length - 1
-    ) {
-
-        tab.historyIndex++;
-
-        window.location.href =
-            tab.history[
-                tab.historyIndex
-            ];
-
-    } else {
-
+    try {
+        frame.contentWindow.history.forward();
+    } catch {
         window.history.forward();
-
     }
-
 }
 
 
@@ -1101,13 +895,16 @@ function goForward() {
 
 function reloadPage() {
 
-    location.reload();
-
+    try {
+        frame.contentWindow.location.reload();
+    } catch {
+        frame.src = frame.src;
+    }
 }
 
 
 /* =================================
-   INITIALISE
+   START
 ================================= */
 
 renderTabs();
