@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GazBrowse</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+
+            background: black;
+            color: aliceblue;
+
+            font-family: Arial, sans-serif;
+        }
+
+
+        /* =================================
+           HEADER
+        ================================= */
+
+        .container {
+            width: 100%;
+
+            padding: 20px 30px;
+
+            display: grid;
+
+            grid-template-columns: 1fr auto 1fr;
+
+            align-items: center;
+        }
+
+
+        .left {
+            justify-self: start;
+        }
+
+
+        .center {
+            justify-self: center;
+        }
+
+
+        .right {
+            justify-self: end;
+        }
+
+
+        .left p,
+        .right p {
+            margin: 0;
+        }
+
+
+        .center strong {
+            font-size: 18px;
+        }
+
+
+
+        /* =================================
+           MAIN CONTENT
+        ================================= */
+
+        .main {
+            min-height: calc(100vh - 90px);
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 20px;
+        }
+
+
+        h1 {
+            margin: 0;
+
+            font-size: 48px;
+
+            text-align: center;
+        }
+
+
+
+        /* =================================
+           SEARCH BOX
+        ================================= */
+
+        .search-box {
+            width: 500px;
+
+            height: 55px;
+
+            background: white;
+
+            border-radius: 999px;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 0 25px;
+
+            box-shadow:
+                0 4px 25px rgba(255, 255, 255, 0.08);
+        }
+
+
+        .search-box input {
+            width: 100%;
+
+            height: 100%;
+
+            border: none;
+
+            outline: none;
+
+            background: transparent;
+
+            color: #222;
+
+            font-size: 16px;
+        }
+
+
+        .search-box input::placeholder {
+            color: #777;
+        }
+
+
+
+        /* =================================
+           SEARCH FILTER TABS
+        ================================= */
+
+        .search-tabs {
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .search-tab {
+            border: none;
+
+            background: #222;
+
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 999px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .search-tab:hover {
+            background: #333;
+        }
+
+
+        .search-tab:active {
+            transform: scale(0.95);
+        }
+
+
+
+        /* =================================
+           MOBILE CONTROLS
+           
+           Hidden on desktop/tablet
+        ================================= */
+
+        .mobile-controls {
+            display: none;
+        }
+
+
+
+        /* =================================
+           TAB OVERVIEW
+           
+           Hidden normally
+        ================================= */
+
+        .tab-overview {
+            display: none;
+        }
+
+
+
+        /* =================================
+           TABLET
+        ================================= */
+
+        @media (max-width: 800px) {
+
+            h1 {
+                font-size: 40px;
+            }
+
+
+            .search-box {
+                width: 70vw;
+            }
+
+        }
+
+
+
+        /* =================================
+           MOBILE
+        ================================= */
+
+        @media (max-width: 600px) {
+
+            /* HEADER */
+
+            .container {
+                padding: 15px;
+            }
+
+
+            .left p,
+            .right p {
+                font-size: 12px;
+            }
+
+
+            .center strong {
+                font-size: 16px;
+            }
+
+
+
+            /* MAIN */
+
+            .main {
+
+                min-height: calc(100vh - 70px);
+
+                padding: 20px;
+
+                padding-bottom: 100px;
+            }
+
+
+            h1 {
+                font-size: 32px;
+            }
+
+
+
+            /* SEARCH */
+
+            .search-box {
+
+                width: 90vw;
+
+                max-width: 500px;
+
+                height: 52px;
+
+                padding: 0 20px;
+            }
+
+
+            .search-box input {
+                font-size: 15px;
+            }
+
+
+
+            /* SEARCH TABS */
+
+            .search-tabs {
+                gap: 6px;
+
+                flex-wrap: wrap;
+            }
+
+
+            .search-tab {
+                padding: 8px 13px;
+
+                font-size: 13px;
+            }
+
+
+
+            /* =================================
+               MOBILE BOTTOM CONTROLS
+            ================================= */
+
+            .mobile-controls {
+
+                position: fixed;
+
+                right: 18px;
+
+                bottom: 18px;
+
+                display: flex;
+
+                align-items: center;
+
+                gap: 10px;
+
+                z-index: 1000;
+            }
+
+
+            .tab-button,
+            .new-tab-button {
+
+                width: 45px;
+
+                height: 45px;
+
+                border: none;
+
+                border-radius: 50%;
+
+                background: rgba(40, 40, 40, 0.96);
+
+                color: white;
+
+                cursor: pointer;
+
+                box-shadow:
+                    0 4px 15px rgba(0, 0, 0, 0.4);
+
+                transition: 0.2s;
+            }
+
+
+            .tab-button:hover,
+            .new-tab-button:hover {
+
+                background: #444;
+            }
+
+
+            .tab-button:active,
+            .new-tab-button:active {
+
+                transform: scale(0.92);
+            }
+
+
+            .tab-button {
+
+                font-size: 16px;
+
+                font-weight: bold;
+            }
+
+
+            .new-tab-button {
+
+                font-size: 25px;
+
+                font-weight: 300;
+            }
+
+
+
+            /* =================================
+               TAB OVERVIEW
+            ================================= */
+
+            .tab-overview {
+
+                position: fixed;
+
+                inset: 0;
+
+                width: 100%;
+
+                height: 100%;
+
+                background: #111;
+
+                z-index: 2000;
+
+                padding: 25px;
+
+                overflow-y: auto;
+            }
+
+
+            .tab-overview.open {
+
+                display: block;
+            }
+
+
+
+            /* =================================
+               TAB HEADER
+            ================================= */
+
+            .tab-header {
+
+                display: flex;
+
+                justify-content: space-between;
+
+                align-items: center;
+
+                margin-bottom: 25px;
+
+                font-size: 22px;
+
+                font-weight: bold;
+            }
+
+
+            .tab-header button {
+
+                border: none;
+
+                background: #333;
+
+                color: white;
+
+                padding: 8px 15px;
+
+                border-radius: 999px;
+
+                cursor: pointer;
+
+                font-size: 14px;
+            }
+
+
+            .tab-header button:active {
+
+                transform: scale(0.95);
+            }
+
+
+
+            /* =================================
+               TAB GRID
+            ================================= */
+
+            .tab-grid {
+
+                display: grid;
+
+                grid-template-columns: repeat(2, 1fr);
+
+                gap: 15px;
+
+                padding-bottom: 90px;
+            }
+
+
+
+            /* =================================
+               INDIVIDUAL TAB CARD
+            ================================= */
+
+            .overview-tab {
+
+                position: relative;
+
+                height: 180px;
+
+                background: #222;
+
+                border-radius: 18px;
+
+                padding: 15px;
+
+                cursor: pointer;
+
+                border: 2px solid transparent;
+
+                overflow: hidden;
+
+                transition: 0.2s;
+            }
+
+
+            .overview-tab:hover {
+
+                background: #2b2b2b;
+            }
+
+
+            .overview-tab.active {
+
+                border-color: white;
+            }
+
+
+
+            /* =================================
+               TAB PREVIEW
+            ================================= */
+
+            .tab-preview {
+
+                height: 120px;
+
+                width: 100%;
+
+                background: #151515;
+
+                border-radius: 12px;
+
+                display: flex;
+
+                flex-direction: column;
+
+                align-items: center;
+
+                justify-content: center;
+
+                gap: 8px;
+
+                margin-bottom: 10px;
+
+                overflow: hidden;
+            }
+
+
+            .preview-logo {
+
+                font-size: 18px;
+
+                font-weight: bold;
+
+                color: #ddd;
+            }
+
+
+            .preview-search {
+
+                width: 75%;
+
+                height: 12px;
+
+                background: #444;
+
+                border-radius: 999px;
+            }
+
+
+
+            /* =================================
+               TAB TITLE
+            ================================= */
+
+            .overview-tab-title {
+
+                font-size: 13px;
+
+                white-space: nowrap;
+
+                overflow: hidden;
+
+                text-overflow: ellipsis;
+
+                padding-right: 30px;
+            }
+
+
+
+            /* =================================
+               CLOSE TAB
+            ================================= */
+
+            .overview-tab-close {
+
+                position: absolute;
+
+                top: 10px;
+
+                right: 10px;
+
+                width: 28px;
+
+                height: 28px;
+
+                border: none;
+
+                border-radius: 50%;
+
+                background: #444;
+
+                color: white;
+
+                cursor: pointer;
+
+                font-size: 17px;
+
+                z-index: 5;
+            }
+
+
+            .overview-tab-close:hover {
+
+                background: #555;
+            }
+
+
+
+            /* =================================
+               NEW TAB BUTTON
+            ================================= */
+
+            .overview-new-tab {
+
+                position: fixed;
+
+                bottom: 25px;
+
+                left: 50%;
+
+                transform: translateX(-50%);
+
+                border: none;
+
+                background: white;
+
+                color: black;
+
+                padding: 12px 24px;
+
+                border-radius: 999px;
+
+                font-size: 15px;
+
+                cursor: pointer;
+
+                box-shadow:
+                    0 4px 20px rgba(0, 0, 0, 0.4);
+            }
+
+
+            .overview-new-tab:active {
+
+                transform:
+                    translateX(-50%)
+                    scale(0.95);
+            }
+
+        }
+
+
+
+        /* =================================
+           VERY SMALL PHONES
+        ================================= */
+
+        @media (max-width: 400px) {
+
+            .tab-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .overview-tab {
+
+                height: 170px;
+            }
+
+
+            .search-box {
+
+                width: 94vw;
+            }
+
+
+            h1 {
+
+                font-size: 29px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+
+    <!-- =================================
+         HEADER
+    ================================= -->
+
+    <div class="container">
+
+        <div class="left">
+
+            <p>
+                est . 2026
+            </p>
+
+        </div>
+
+
+        <div class="center">
+
+            <strong>
+                GazBrowse
+            </strong>
+
+        </div>
+
+
+        <div class="right">
+
+            <p>
+                AI search
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================
+         MAIN
+    ================================= -->
+
+    <main class="main">
+
+
+        <h1>
+            GazBrowse
+        </h1>
+
+
+
+        <!-- SEARCH -->
+
+        <form
+            class="search-box"
+            id="searchForm"
+        >
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search Google..."
+                autocomplete="off"
+            >
+
+        </form>
+
+
+
+        <!-- =================================
+             SEARCH FILTERS
+        ================================= -->
+
+        <div class="search-tabs">
+
+
+            <button
+                class="search-tab"
+                onclick="setSearch('')"
+            >
+                All
+            </button>
+
+
+            <button
+                class="search-tab"
+                onclick="setSearch('site:youtube.com ')"
+            >
+                YouTube
+            </button>
+
+
+            <button
+                class="search-tab"
+                onclick="setSearch('site:reddit.com ')"
+            >
+                Reddit
+            </button>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =================================
+         MOBILE CONTROLS
+    ================================= -->
+
+    <div class="mobile-controls">
+
+
+        <!-- TAB COUNT -->
+
+        <button
+            class="tab-button"
+            onclick="openTabOverview()"
+            aria-label="Open tabs"
+        >
+
+            <span id="tabCount">
+                1
+            </span>
+
+        </button>
+
+
+
+        <!-- NEW TAB -->
+
+        <button
+            class="new-tab-button"
+            onclick="newTab()"
+            aria-label="New tab"
+        >
+            +
+        </button>
+
+
+    </div>
+
+
+
+    <!-- =================================
+         MOBILE TAB OVERVIEW
+    ================================= -->
+
+    <div
+        class="tab-overview"
+        id="tabOverview"
+    >
+
+
+        <div class="tab-header">
+
+
+            <span>
+                Tabs
+            </span>
+
+
+            <button
+                onclick="closeTabOverview()"
+            >
+                Done
+            </button>
+
+
+        </div>
+
+
+
+        <div
+            class="tab-grid"
+            id="tabGrid"
+        ></div>
+
+
+
+        <button
+            class="overview-new-tab"
+            onclick="newTab()"
+        >
+            + New Tab
+        </button>
+
+
+    </div>
+
+
+
+    <!-- =================================
+         JAVASCRIPT
+    ================================= -->
+
+    <script>
+
+
+        /* =================================
+           TAB DATA
+        ================================= */
+
+        let tabs = [
+
+            {
+                title: "New Tab",
+
+                search: ""
+            }
+
+        ];
+
+
+        let activeTab = 0;
+
+
+
+        /* =================================
+           ELEMENTS
+        ================================= */
+
+        const input =
+            document.getElementById(
+                "searchInput"
+            );
+
+
+        const form =
+            document.getElementById(
+                "searchForm"
+            );
+
+
+        const tabGrid =
+            document.getElementById(
+                "tabGrid"
+            );
+
+
+        const tabCount =
+            document.getElementById(
+                "tabCount"
+            );
+
+
+        const tabOverview =
+            document.getElementById(
+                "tabOverview"
+            );
+
+
+
+        /* =================================
+           UPDATE TAB COUNT
+        ================================= */
+
+        function updateTabCount() {
+
+            tabCount.textContent =
+                tabs.length;
+
+        }
+
+
+
+        /* =================================
+           OPEN TAB OVERVIEW
+        ================================= */
+
+        function openTabOverview() {
+
+            renderTabOverview();
+
+            tabOverview.classList.add(
+                "open"
+            );
+
+        }
+
+
+
+        /* =================================
+           CLOSE TAB OVERVIEW
+        ================================= */
+
+        function closeTabOverview() {
+
+            tabOverview.classList.remove(
+                "open"
+            );
+
+        }
+
+
+
+        /* =================================
+           RENDER TAB OVERVIEW
+        ================================= */
+
+        function renderTabOverview() {
+
+            tabGrid.innerHTML = "";
+
+
+            tabs.forEach(
+                (tab, index) => {
+
+
+                    /* TAB CARD */
+
+                    const tabElement =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    tabElement.className =
+                        "overview-tab";
+
+
+                    if (
+                        index === activeTab
+                    ) {
+
+                        tabElement.classList.add(
+                            "active"
+                        );
+
+                    }
+
+
+
+                    /* PREVIEW */
+
+                    const preview =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    preview.className =
+                        "tab-preview";
+
+
+                    const logo =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    logo.className =
+                        "preview-logo";
+
+
+                    logo.textContent =
+                        "GazBrowse";
+
+
+                    const search =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    search.className =
+                        "preview-search";
+
+
+                    preview.appendChild(
+                        logo
+                    );
+
+
+                    preview.appendChild(
+                        search
+                    );
+
+
+
+                    /* TITLE */
+
+                    const title =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    title.className =
+                        "overview-tab-title";
+
+
+                    title.textContent =
+                        tab.title;
+
+
+
+                    /* CLOSE */
+
+                    const close =
+                        document.createElement(
+                            "button"
+                        );
+
+
+                    close.className =
+                        "overview-tab-close";
+
+
+                    close.textContent =
+                        "×";
+
+
+                    close.onclick =
+                        function(event) {
+
+                            event.stopPropagation();
+
+                            closeTab(index);
+
+                        };
+
+
+
+                    /* ADD */
+
+                    tabElement.appendChild(
+                        preview
+                    );
+
+
+                    tabElement.appendChild(
+                        title
+                    );
+
+
+                    tabElement.appendChild(
+                        close
+                    );
+
+
+
+                    /* SWITCH */
+
+                    tabElement.onclick =
+                        function() {
+
+                            switchTab(index);
+
+                        };
+
+
+
+                    tabGrid.appendChild(
+                        tabElement
+                    );
+
+                }
+            );
+
+
+            updateTabCount();
+
+        }
+
+
+
+        /* =================================
+           SWITCH TAB
+        ================================= */
+
+        function switchTab(index) {
+
+            activeTab = index;
+
+
+            input.value =
+                tabs[index].search;
+
+
+            renderTabOverview();
+
+
+            closeTabOverview();
+
+
+            input.focus();
+
+        }
+
+
+
+        /* =================================
+           NEW TAB
+        ================================= */
+
+        function newTab() {
+
+
+            tabs.push({
+
+                title: "New Tab",
+
+                search: ""
+
+            });
+
+
+            activeTab =
+                tabs.length - 1;
+
+
+            input.value = "";
+
+
+            updateTabCount();
+
+
+            renderTabOverview();
+
+
+            /*
+                If we're currently
+                looking at the tab
+                overview, stay there.
+            */
+
+            if (
+                tabOverview.classList.contains(
+                    "open"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            input.focus();
+
+        }
+
+
+
+        /* =================================
+           CLOSE TAB
+        ================================= */
+
+        function closeTab(index) {
+
+
+            /*
+                Don't allow zero tabs.
+            */
+
+            if (
+                tabs.length === 1
+            ) {
+
+                tabs[0] = {
+
+                    title: "New Tab",
+
+                    search: ""
+
+                };
+
+
+                activeTab = 0;
+
+
+                input.value = "";
+
+
+                updateTabCount();
+
+
+                renderTabOverview();
+
+
+                return;
+
+            }
+
+
+
+            /* REMOVE TAB */
+
+            tabs.splice(
+                index,
+                1
+            );
+
+
+
+            /* FIX ACTIVE TAB */
+
+            if (
+                activeTab >= tabs.length
+            ) {
+
+                activeTab =
+                    tabs.length - 1;
+
+            }
+
+
+            if (
+                index < activeTab
+            ) {
+
+                activeTab--;
+
+            }
+
+
+
+            /* LOAD ACTIVE TAB */
+
+            input.value =
+                tabs[activeTab].search;
+
+
+            updateTabCount();
+
+
+            renderTabOverview();
+
+        }
+
+
+
+        /* =================================
+           SEARCH
+        ================================= */
+
+        form.addEventListener(
+            "submit",
+            function(event) {
+
+
+                event.preventDefault();
+
+
+
+                const query =
+                    input.value.trim();
+
+
+
+                if (
+                    query === ""
+                ) {
+
+                    return;
+
+                }
+
+
+
+                /* SAVE SEARCH */
+
+                tabs[activeTab].search =
+                    query;
+
+
+                tabs[activeTab].title =
+                    query;
+
+
+
+                updateTabCount();
+
+
+                renderTabOverview();
+
+
+
+                /*
+                    Open Google.
+                */
+
+                const googleURL =
+                    "https://www.google.com/search?q="
+                    +
+                    encodeURIComponent(
+                        query
+                    );
+
+
+                window.location.href =
+                    googleURL;
+
+            }
+        );
+
+
+
+        /* =================================
+           SEARCH FILTER
+        ================================= */
+
+        function setSearch(prefix) {
+
+            input.value =
+                prefix;
+
+
+            input.focus();
+
+        }
+
+
+
+        /* =================================
+           KEYBOARD SHORTCUT
+        ================================= */
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+
+                /*
+                    Ctrl/Cmd + T
+                    = New tab
+                */
+
+                if (
+                    (event.ctrlKey ||
+                    event.metaKey)
+                    &&
+                    event.key === "t"
+                ) {
+
+                    event.preventDefault();
+
+                    newTab();
+
+                }
+
+
+
+                /*
+                    Escape
+                    = Close tab overview
+                */
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeTabOverview();
+
+                }
+
+            }
+        );
+
+
+
+        /* =================================
+           INITIALISE
+        ================================= */
+
+        updateTabCount();
+
+        renderTabOverview();
+
+
+    </script>
+
+</body>
+
+</html>
